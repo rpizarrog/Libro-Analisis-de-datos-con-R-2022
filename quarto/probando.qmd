@@ -1,0 +1,51 @@
+---
+title: "probando"
+author: "Rubén Pizarro Gurrola"
+format: html
+date: "`r Sys.Date()`"
+editor: visual
+---
+
+## Esto es una prueba
+
+```{r warning=FALSE, message=FALSE}
+library(readr)
+library(dplyr)
+
+library(ggplot2)
+library(cowplot)
+
+library(knitr)
+library(kableExtra)  # Para tablas amigables
+
+library(DT)
+options(scipen = 999) # Notación normal
+```
+
+# Cargar datos
+
+```{r}
+
+ 
+datos <- read.csv("https://raw.githubusercontent.com/rpizarrog/Libro-Analisis-de-datos-con-R-2022/main/datos/exams.csv", stringsAsFactors = TRUE)
+```
+
+Al explorar los datos, se tiene un *data.frame* de 1000 registros con 8 variables, todas ellas son alternativas posibles como variables de estudio
+
+```{r}
+str(datos)
+```
+
+Los datos
+
+```{r}
+head(datos, 10) %>%
+  kbl(caption = "Los datos") %>%
+  kable_styling(full_width = F, bootstrap_options = c("striped", "bordered", "condensed")) 
+```
+
+Los datos
+
+```{r}
+datatable(datos, caption = "Datos")
+```
