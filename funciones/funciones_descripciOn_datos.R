@@ -135,19 +135,20 @@ f_diag_dispersion <- function (datos) {
   nombre_datos <- substitute(datos)
   nom.x = colnames(datos[1])
   nom.y = colnames(datos[2])
+  n <- nrow(datos) 
   x = datos[,1]
   y = datos[,2]
   
-  media.x <- round(mean(x), 4)
-  media.y <- round(mean(y), 4)
+  media.x <- round(mean(x), 2)
+  media.y <- round(mean(y), 2)
   
   g <- ggplot() +
     geom_point(aes(x = x, y = y), col='blue') +
     geom_vline(xintercept = media.x, col='red', lty=2) +
     geom_hline(yintercept = media.y, col='red', lty=2) +
     ggtitle(label = paste(paste("Dispersión ", nombre_datos)) , 
-            subtitle = paste("Medias ", substring(colnames(datos[1]), 1, 4), " =", media.x, 
-                             ";", substring(colnames(datos[2]), 1, 4), "=", media.y)) +
+            subtitle = paste("n=",n,"Medias ", substring(colnames(datos[1]), 1, 2), "=", media.x, 
+                             ";", substring(colnames(datos[2]), 1, 2), "=", media.y)) +
     xlab( nom.x) +
     ylab( nom.y)
   return (g)
