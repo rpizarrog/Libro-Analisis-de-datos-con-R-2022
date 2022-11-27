@@ -145,9 +145,9 @@ f_diag_dispersion <- function (datos) {
     geom_point(aes(x = x, y = y), col='blue') +
     geom_vline(xintercept = media.x, col='red', lty=2) +
     geom_hline(yintercept = media.y, col='red', lty=2) +
-    ggtitle(label = paste(paste("Dispersión de la ", nombre_datos)) , 
-            subtitle = paste("Media ", nom.x, " =", media.x, 
-                             " , ", "Media ", nom.y, "=", media.y)) +
+    ggtitle(label = paste(paste("Dispersión ", nombre_datos)) , 
+            subtitle = paste("Medias ", substring(colnames(datos[1]), 1, 4), " =", media.x, 
+                             ";", substring(colnames(datos[2]), 1, 4), "=", media.y)) +
     xlab( nom.x) +
     ylab( nom.y)
   return (g)
