@@ -41,8 +41,9 @@ f.discretas.ve.v.sd <- function(casos) {
     geom_vline(xintercept = VE, color = 'red', linetype = "dashed", size = 1) +
     geom_vline(xintercept = VE - desv.std, color = 'blue', linetype = "dashed", size = 1) +
     geom_vline(xintercept = VE + desv.std, color = 'blue', linetype = "dashed", size = 1) +
-    labs(title="Distribución de Probabilidad", x="Variable X", y="Probabilidad")
-  
+    labs(title="Distribución Acumulada de Probabilidad ", 
+         subtitle = paste("VE", round(VE, 2), "± Desv. Std", round(desv.std, 2)), 
+         x="Variable x", y="Prob. F(x)")
   # Gráfico acumulado
   g_acumulado <- ggplot(data = tabla, aes(x = x, y=F_acumulado)) +
     geom_point(colour="blue") + 
@@ -104,13 +105,15 @@ f.discretas.ve.v.sd.val.disc <- function(discretas, casos) {
     geom_vline(xintercept = VE, color = 'red', linetype = "dashed", size = 1) +
     geom_vline(xintercept = VE - desv.std, color = 'blue', linetype = "dashed", size = 1) +
     geom_vline(xintercept = VE + desv.std, color = 'blue', linetype = "dashed", size = 1) +
-    labs(title="Distribución de Probabilidad", x="Variable X", y="Probabilidad")
-  
+    labs(title="Distribución Acumulada de Probabilidad ", 
+         subtitle = paste("VE", round(VE, 2), "± Desv. Std", round(desv.std, 2)), 
+         x="Variable x", y="Prob. F(x)")
   # Gráfico acumulado
   g_acumulado <- ggplot(data = tabla, aes(x = x, y=F_acumulado)) +
     geom_point(colour="blue") + 
     geom_line(colour="red") +
-    labs(title="Distribución Acumulada de Probabilidad ", x="Variable x", y="Prob. F(x)")
+    labs(title="Distribución Acumulada de Probabilidad ", 
+         subtitle = paste("VE", round(VE, 2), "± Desv. Std", round(desv.std, 2)), x="Variable x", y="Prob. F(x)")
   
   
   
