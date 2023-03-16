@@ -15,7 +15,7 @@ f.discretas.ve.v.sd <- function(casos) {
   
   
   # Valor esperado
-  VE <- sum(x.f_prob_x)
+  VE <- sum(x_f_prob_x)
   
   # Varianza y Desviación Std
   x_menos_VE <- x - VE
