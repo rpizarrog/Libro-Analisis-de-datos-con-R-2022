@@ -38,7 +38,7 @@ f.discretas.ve.v.sd <- function(casos) {
   n <- sum(casos)
   x = 0:(length(casos) - 1)
   
-  # Calculando columas
+  # Calculando columnas
   prob_x <- casos / n
   acumulado <- cumsum(prob_x)
   x.prob_x <- x * prob_x
@@ -55,9 +55,13 @@ f.discretas.ve.v.sd <- function(casos) {
   desv.std <- sqrt(varianza)
   
   
-  # Grafica
-  #plot <- ggplot(mpg, aes(displ, hwy, colour = class)) +
-  #        geom_point()
+  # Diagrama de barra
+  g_barra <- ggplot(data = resultado$tabla, aes(x = x, y=prob_x , fill=x)) +
+    geom_bar(stat="identity") +
+    geom_vline(xintercept = VE, color = 'red', linetype = "dashed", size = 1) +
+    geom_vline(xintercept = VE - desv.std, color = 'blue', linetype = "dashed", size = 1) +
+    geom_vline(xintercept = VE + desv.std, color = 'blue', linetype = "dashed", size = 1) +
+    labs(title="Distribución de Probabilidad Uniforme Discreta Probabilidad", subtitle = paste("VE", round(resultado$VE, 2), "± Desv. Std", round(resultado$desv.std, 2)), x="Variable X", y="Probabilidad")
   
   tabla <- data.frame(x, casos, prob_x,
                       acumulado, x.prob_x,
@@ -67,7 +71,8 @@ f.discretas.ve.v.sd <- function(casos) {
                       x_menos_VE.CUAD.prob_x
   )
   estadisticos <- list(tabla = tabla, x = x, N = n,
-                       VE = VE, varianza = varianza, desv.std = desv.std)
+                       VE = VE, varianza = varianza, desv.std = desv.std, 
+                       g_barra = g_barra)
   
   estadisticos
   
@@ -100,9 +105,13 @@ f.discretas.ve.v.sd.val.disc <- function(discretas, casos) {
   desv.std <- sqrt(varianza)
   
   
-  # Grafica
-  #plot <- ggplot(mpg, aes(displ, hwy, colour = class)) +
-  #        geom_point()
+  g_barra <- ggplot(data = resultado$tabla, aes(x = x, y=prob_x , fill=x)) +
+    geom_bar(stat="identity") +
+    geom_vline(xintercept = VE, color = 'red', linetype = "dashed", size = 1) +
+    geom_vline(xintercept = VE - desv.std, color = 'blue', linetype = "dashed", size = 1) +
+    geom_vline(xintercept = VE + desv.std, color = 'blue', linetype = "dashed", size = 1) +
+    labs(title="Distribución de Probabilidad Uniforme Discreta Probabilidad", subtitle = paste("VE", round(resultado$VE, 2), "± Desv. Std", round(resultado$desv.std, 2)), x="Variable X", y="Probabilidad")
+  
   
   tabla <- data.frame(x, casos, prob_x,
                       acumulado, x.prob_x,
@@ -112,7 +121,8 @@ f.discretas.ve.v.sd.val.disc <- function(discretas, casos) {
                       x_menos_VE.CUAD.prob_x
   )
   estadisticos <- list(tabla = tabla, x = x, N = n,
-                       VE = VE, varianza = varianza, desv.std = desv.std)
+                       VE = VE, varianza = varianza, desv.std = desv.std, 
+                       g_barra = g_barra)
   
   estadisticos
   
@@ -624,7 +634,7 @@ f.normal.all <- function(media, desv.std, x1, x2, tipo) {
     geom_vline(xintercept = media + desv.std, color = 'blue', linetype = "dashed", size = 1) +
     ggtitle(label = "Histograma", 
             subtitle = subtitulo)
-  g_hist
+  # g_hist
   
   #  ggplot()
   g.gauss.gg <- ggplot(data = datos, aes(x, f.x) ) +
@@ -683,6 +693,7 @@ f.normal.all <- function(media, desv.std, x1, x2, tipo) {
   
   distribucion <- list(prob = prob, 
                        prob.str = prob.str,
+                       g_hist = g_hist,
                        g.gauss.gg = g.gauss.gg,
                        g.plotDist = g.plotDist,
                        g.gauss.plotly = g.gauss.plotly)
