@@ -159,9 +159,9 @@ f_Bernoulli_all <- function(x, p, n) {
   
   
   # Para un solo experimeto
-  acumulado <- cumsum(tabla1$p)
+  acumulado <- cumsum(tabla$p)
   
-  tabla <- cbind(tabla1, acumulado)
+  tabla <- cbind(tabla, acumulado)
   VE = p
   varianza = p * q
   desv.std = sqrt(varianza)
@@ -182,10 +182,10 @@ f_Bernoulli_all <- function(x, p, n) {
     prob[xi+1] = round(Cn * p^(xi) * q ^ (n-xi), 4)
   }
   
-  casos <- round(prob * 1000) # Simular 1000 lanzamientos distribuidos
+  casos <- round(prob * 1000) # Simular 1000 casos lanzamientos distribuidos
   
   # Reutilizar la función f.discretas.ve.v.sd.val.disc()
-  # que construye una tabla de distribución discreta y un digarama de barra
+  # que construye una tabla de distribución discreta y un diagrama de barra
   resultado <- f.discretas.ve.v.sd.val.disc(discretas = 0:n, casos = casos, distribucion = 2)
 
   estadisticos <- list(tabla = tabla, x = x, n = n,
