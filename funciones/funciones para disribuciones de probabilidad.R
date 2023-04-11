@@ -168,7 +168,7 @@ f_Bernoulli_all <- function(x, p, n) {
   
   t_dist <- "Distribución de Bernoulli. Un solo experimento"
   
-  g_barra1 <- ggplot(data = tabla1, aes(x = x, y=p , fill=x)) +
+  g_barra <- ggplot(data = tabla, aes(x = x, y=p , fill=x)) +
     geom_bar(stat="identity") +
     geom_vline(xintercept = VE, color = 'red', linetype = "dashed", size = 1) +
     geom_vline(xintercept = VE - desv.std, color = 'blue', linetype = "dashed", size = 1) +
@@ -188,9 +188,9 @@ f_Bernoulli_all <- function(x, p, n) {
   # que construye una tabla de distribución discreta y un digarama de barra
   resultado <- f.discretas.ve.v.sd.val.disc(discretas = 0:n, casos = casos, distribucion = 2)
 
-  estadisticos <- list(tabla1 = tabla1, x = x, n = n,
-                       VE1 = VE1, varianza1 = varianza1, desv.std1 = desv.std1, 
-                       g_barra1 = g_barra1,
+  estadisticos <- list(tabla = tabla, x = x, n = n,
+                       VE = VE, varianza = varianza, desv.std = desv.std, 
+                       g_barra = g_barra,
                        resultado = resultado)
   
   estadisticos
