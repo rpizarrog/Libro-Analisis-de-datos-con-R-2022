@@ -155,7 +155,7 @@ f.discretas.ve.v.sd.val.disc <- function(discretas, casos, distribucion) {
 f_Bernoulli_all <- function(x, p, n) {
   
   q = (1-p)
-  tabla1 <- data.frame(x = x, p = c(p, 1-p))
+  tabla <- data.frame(x = x, p = c(p, 1-p))
   
   
   # Para un solo experimeto
