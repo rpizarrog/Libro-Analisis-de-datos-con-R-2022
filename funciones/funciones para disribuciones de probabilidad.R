@@ -32,7 +32,7 @@ prueba_devolver_plot <- function(a, b) {
 
 # Algunas funciones para variables discretas
 # Función que devuelve tabla de distribución VE, Varianza y Desv. Std, recibe solo los casos
-f.discretas.ve.v.sd <- function(casos) {
+f.discretas.ve.v.sd <- function(casos, distribucion) {
   #library(ggplot2)
   # Inicializando valores
   n <- sum(casos)
@@ -44,6 +44,7 @@ f.discretas.ve.v.sd <- function(casos) {
   x.prob_x <- x * prob_x
   
   
+  datos <- data.frame(x, prob_x)  
   # Valor esperado
   VE <- sum(x.prob_x)
   
@@ -54,14 +55,24 @@ f.discretas.ve.v.sd <- function(casos) {
   varianza <- sum(x_menos_VE.CUAD.prob_x)
   desv.std <- sqrt(varianza)
   
+  if (distribucion == 1)
+    t_dist <- "Distribución de Probabilidad Uniforme Discreta"
+  if (distribucion == 2)
+    t_dist <- "Distribución de Probabilidad Binomial"
+  if (distribucion == 3)
+    t_dist <- "Distribución de Probabilidad Poisson"
+  if (distribucion == 3)
+    t_dist <- "Distribución de Probabilidad Hipergeométrica"
   
-  # Diagrama de barra
-  g_barra <- ggplot(data = resultado$tabla, aes(x = x, y=prob_x , fill=x)) +
+  
+  
+  g_barra <- ggplot(data = datos, aes(x = x, y=prob_x , fill=x)) +
     geom_bar(stat="identity") +
     geom_vline(xintercept = VE, color = 'red', linetype = "dashed", size = 1) +
     geom_vline(xintercept = VE - desv.std, color = 'blue', linetype = "dashed", size = 1) +
     geom_vline(xintercept = VE + desv.std, color = 'blue', linetype = "dashed", size = 1) +
-    labs(title="Distribución de Probabilidad Uniforme Discreta Probabilidad", subtitle = paste("VE", round(resultado$VE, 2), "± Desv. Std", round(resultado$desv.std, 2)), x="Variable X", y="Probabilidad")
+    labs(title=t_dist, subtitle = paste("VE", round(VE, 2), "± Desv. Std", round(desv.std, 2)), x="Variable X", y="Probabilidad")
+  
   
   tabla <- data.frame(x, casos, prob_x,
                       acumulado, x.prob_x,
@@ -81,8 +92,8 @@ f.discretas.ve.v.sd <- function(casos) {
 
 
 # Similar función a la anterior solo que recibe también los valores de la variable discreta
-# Algunas veces los valores de la variable discreta cominezan por debajo de 0, o no inician en cero
-f.discretas.ve.v.sd.val.disc <- function(discretas, casos) {
+# Algunas veces los valores de la variable discreta comienzan por debajo de 0, o no inician en cero
+f.discretas.ve.v.sd.val.disc <- function(discretas, casos, distribucion) {
   #library(ggplot2)
   # Inicializando valores
   n <- sum(casos)
@@ -93,7 +104,8 @@ f.discretas.ve.v.sd.val.disc <- function(discretas, casos) {
   acumulado <- cumsum(prob_x)
   x.prob_x <- x * prob_x
   
-  
+
+  datos <- data.frame(x, prob_x)  
   # Valor esperado
   VE <- sum(x.prob_x)
   
@@ -104,13 +116,21 @@ f.discretas.ve.v.sd.val.disc <- function(discretas, casos) {
   varianza <- sum(x_menos_VE.CUAD.prob_x)
   desv.std <- sqrt(varianza)
   
+  if (distribucion == 1)
+    t_dist <- "Distribución de Probabilidad Uniforme Discreta"
+  if (distribucion == 2)
+    t_dist <- "Distribución de Probabilidad Binomial"
+  if (distribucion == 3)
+    t_dist <- "Distribución de Probabilidad Poisson"
+  if (distribucion == 3)
+    t_dist <- "Distribución de Probabilidad Hipergeométrica"
   
-  g_barra <- ggplot(data = resultado$tabla, aes(x = x, y=prob_x , fill=x)) +
+  g_barra <- ggplot(data = datos, aes(x = x, y=prob_x , fill=x)) +
     geom_bar(stat="identity") +
     geom_vline(xintercept = VE, color = 'red', linetype = "dashed", size = 1) +
     geom_vline(xintercept = VE - desv.std, color = 'blue', linetype = "dashed", size = 1) +
     geom_vline(xintercept = VE + desv.std, color = 'blue', linetype = "dashed", size = 1) +
-    labs(title="Distribución de Probabilidad Uniforme Discreta Probabilidad", subtitle = paste("VE", round(resultado$VE, 2), "± Desv. Std", round(resultado$desv.std, 2)), x="Variable X", y="Probabilidad")
+    labs(title=t_dist, subtitle = paste("VE", round(VE, 2), "± Desv. Std", round(desv.std, 2)), x="Variable X", y="Probabilidad")
   
   
   tabla <- data.frame(x, casos, prob_x,
@@ -128,6 +148,40 @@ f.discretas.ve.v.sd.val.disc <- function(discretas, casos) {
   
   
 }
+
+f_Bernoulli_all <- function(x, p, n) {
+  
+  q = (1-p)
+  tabla1 <- data.frame(x = x, p = c(p, 1-p))
+  VE = p
+  varianza = p * q
+  desv.std = sqrt(varianza)
+  
+  t_dist <- "Distribución de Bernoulli"
+  
+  g_barra <- ggplot(data = tabla1, aes(x = x, y=p , fill=x)) +
+    geom_bar(stat="identity") +
+    geom_vline(xintercept = VE, color = 'red', linetype = "dashed", size = 1) +
+    geom_vline(xintercept = VE - desv.std, color = 'blue', linetype = "dashed", size = 1) +
+    geom_vline(xintercept = VE + desv.std, color = 'blue', linetype = "dashed", size = 1) +
+    labs(title=t_dist, subtitle = paste("VE", round(VE, 2), "± Desv. Std", round(desv.std, 2)), x="Variable X", y="Probabilidad")
+  
+  prob <- NULL
+  for (x in 0:n) {
+    Cn <- factorial(n) / (factorial(x) * factorial(n-x))
+    prob[x+1] = round(Cn * p^(x) * q ^ (n-x), 4)
+  }
+    
+  tabla2 <- data.frame(x = 0:n, p = prob)
+  
+  
+  estadisticos <- list(tabla1 = tabla1, tabla2 = tabla2, x = x, n = n,
+                       VE = VE, varianza = varianza, desv.std = desv.std, 
+                       g_barra = g_barra)
+  
+  estadisticos
+}
+
 
 
 # Funciones para distribuciones de probabilidad
