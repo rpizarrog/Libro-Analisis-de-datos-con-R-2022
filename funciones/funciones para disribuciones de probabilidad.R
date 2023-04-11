@@ -56,15 +56,15 @@ f.discretas.ve.v.sd <- function(casos, distribucion) {
   desv.std <- sqrt(varianza)
   
   if (distribucion == 1)
-    t_dist <- "Distribución de Probabilidad Uniforme Discreta"
+    t_dist <- "Probabilidad Uniforme Discreta"
   if (distribucion == 2)
-    t_dist <- "Distribución de Probabilidad Binomial"
+    t_dist <- "Probabilidad Bernoulli; n experimentos"
   if (distribucion == 3)
-    t_dist <- "Distribución de Probabilidad Poisson"
-  if (distribucion == 3)
-    t_dist <- "Distribución de Probabilidad Hipergeométrica"
-  
-  
+    t_dist <- "Probabilidad Binomial"
+  if (distribucion == 4)
+    t_dist <- "Probabilidad Poisson"
+  if (distribucion == 5)
+    t_dist <- "Probabilidad Hipergeométrica"
   
   g_barra <- ggplot(data = datos, aes(x = x, y=prob_x , fill=x)) +
     geom_bar(stat="identity") +
@@ -106,6 +106,7 @@ f.discretas.ve.v.sd.val.disc <- function(discretas, casos, distribucion) {
   
 
   datos <- data.frame(x, prob_x)  
+  
   # Valor esperado
   VE <- sum(x.prob_x)
   
@@ -117,13 +118,15 @@ f.discretas.ve.v.sd.val.disc <- function(discretas, casos, distribucion) {
   desv.std <- sqrt(varianza)
   
   if (distribucion == 1)
-    t_dist <- "Distribución de Probabilidad Uniforme Discreta"
+    t_dist <- "Probabilidad Uniforme Discreta"
   if (distribucion == 2)
-    t_dist <- "Distribución de Probabilidad Binomial"
+    t_dist <- "Probabilidad Bernoulli; n experimentos"
   if (distribucion == 3)
-    t_dist <- "Distribución de Probabilidad Poisson"
-  if (distribucion == 3)
-    t_dist <- "Distribución de Probabilidad Hipergeométrica"
+    t_dist <- "Probabilidad Binomial"
+  if (distribucion == 4)
+    t_dist <- "Probabilidad Poisson"
+  if (distribucion == 5)
+    t_dist <- "Probabilidad Hipergeométrica"
   
   g_barra <- ggplot(data = datos, aes(x = x, y=prob_x , fill=x)) +
     geom_bar(stat="identity") +
@@ -153,31 +156,42 @@ f_Bernoulli_all <- function(x, p, n) {
   
   q = (1-p)
   tabla1 <- data.frame(x = x, p = c(p, 1-p))
+  
+  
+  # Para un solo experimeto
+  acumulado <- cumsum(tabla1$p)
+  
+  tabla <- cbind(tabla1, acumulado)
   VE = p
   varianza = p * q
   desv.std = sqrt(varianza)
   
-  t_dist <- "Distribución de Bernoulli"
+  t_dist <- "Distribución de Bernoulli. Un solo experimento"
   
-  g_barra <- ggplot(data = tabla1, aes(x = x, y=p , fill=x)) +
+  g_barra1 <- ggplot(data = tabla1, aes(x = x, y=p , fill=x)) +
     geom_bar(stat="identity") +
     geom_vline(xintercept = VE, color = 'red', linetype = "dashed", size = 1) +
     geom_vline(xintercept = VE - desv.std, color = 'blue', linetype = "dashed", size = 1) +
     geom_vline(xintercept = VE + desv.std, color = 'blue', linetype = "dashed", size = 1) +
     labs(title=t_dist, subtitle = paste("VE", round(VE, 2), "± Desv. Std", round(desv.std, 2)), x="Variable X", y="Probabilidad")
   
+  # Simulación de varios experimentos Bernoulli
   prob <- NULL
-  for (x in 0:n) {
-    Cn <- factorial(n) / (factorial(x) * factorial(n-x))
-    prob[x+1] = round(Cn * p^(x) * q ^ (n-x), 4)
+  for (xi in 0:n) {
+    Cn <- factorial(n) / (factorial(xi) * factorial(n-xi))
+    prob[xi+1] = round(Cn * p^(xi) * q ^ (n-xi), 4)
   }
-    
-  tabla2 <- data.frame(x = 0:n, p = prob)
   
+  casos <- round(prob * 1000) # Simular 1000 lanzamientos distribuidos
   
-  estadisticos <- list(tabla1 = tabla1, tabla2 = tabla2, x = x, n = n,
-                       VE = VE, varianza = varianza, desv.std = desv.std, 
-                       g_barra = g_barra)
+  # Reutilizar la función f.discretas.ve.v.sd.val.disc()
+  # que construye una tabla de distribución discreta y un digarama de barra
+  resultado <- f.discretas.ve.v.sd.val.disc(discretas = 0:n, casos = casos, distribucion = 2)
+
+  estadisticos <- list(tabla1 = tabla1, x = x, n = n,
+                       VE1 = VE1, varianza1 = varianza1, desv.std1 = desv.std1, 
+                       g_barra1 = g_barra1,
+                       resultado = resultado)
   
   estadisticos
 }
