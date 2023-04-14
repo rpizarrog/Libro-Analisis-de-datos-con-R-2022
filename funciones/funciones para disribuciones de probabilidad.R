@@ -269,7 +269,8 @@ unif_area <- function(min = 0, max = 1, lb, ub, col = 1, acolor = "lightgray", .
 # Devuelve las probabilidades para cada valor de la variable aleatoria discreta
 f.prob.binom <- function (x,n,exito) {
   fracaso <- 1 - exito
-  prob <- (factorial(n) / (factorial(x) * factorial(n-x)))  * ((exito^x) * (fracaso ^ (n-x)))
+  prob <- (factorial(n) / 
+             (factorial(x) * factorial(n-x)))  * ((exito^x) * (fracaso ^ (n-x)))
   prob
 }
 
@@ -285,7 +286,6 @@ f.tabla_binom <- function(n, exito) {
 # 14 Oct 2022
 # Función para devuelve tabla binomial, VE Varianza y Desv. Std
 # de una distribución binomial. 
-
 f.binom.all <- function(n, exito){
   tabla <- data.frame(x = 0:n,
                       f.x = dbinom(x = 0:n, size = n, prob = exito),
@@ -305,8 +305,7 @@ f.binom.all <- function(n, exito){
                      kind = "d",
                      xlab ="X's", 
                      ylab = "Probabilidad", 
-                     main='Distribución Binomial',
-                     sub = "Densidad")
+                     main='Distribución Binomial')
   
   g.hist <- plotDist(dist = "binom", 
                      params = c(n, exito), 
@@ -314,8 +313,7 @@ f.binom.all <- function(n, exito){
                      kind = "h", 
                      xlab ="X's", 
                      ylab = "Probabilidad", 
-                     main='Distribución Binomial',
-                     sub = "Histograma")
+                     main='Distribución Binomial')
   
   g.acum <- plotDist(dist = "binom", 
                      params = c(n, exito), 
@@ -325,6 +323,14 @@ f.binom.all <- function(n, exito){
                      ylab = "Prob Acumulada", 
                      main='Distribución Binomial',
                      sub = "")
+  
+  t_dist <- 'Distribución Binomial'
+  g_barra <- ggplot(data = tabla, aes(x = x, y=f.x , fill=x)) +
+    geom_bar(stat="identity") +
+    geom_vline(xintercept = VE, color = 'red', linetype = "dashed", size = 1) +
+    geom_vline(xintercept = VE - desv.std, color = 'blue', linetype = "dashed", size = 1) +
+    geom_vline(xintercept = VE + desv.std, color = 'blue', linetype = "dashed", size = 1) +
+    labs(title=t_dist, subtitle = paste("VE", round(VE, 2), "± Desv. Std", round(desv.std, 2)), x="Variable X", y="Probabilidad")
   
   g.text <- ggplot(data = tabla) +
     geom_col(aes(x = x, y = f.x), fill='blue') + 
@@ -359,6 +365,7 @@ f.binom.all <- function(n, exito){
                        g.hist = g.hist,
                        g.acum = g.acum,
                        g.text = g.text,
+                       g_barra = g_barra,
                        g.hist.plotly = g.hist.plotly,
                        g.acum.plotly = g.acum.plotly,
                        g_all = f.hist.dens.discreta(tabla))
