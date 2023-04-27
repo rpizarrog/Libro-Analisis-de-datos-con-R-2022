@@ -5,6 +5,7 @@ library(mosaic)
 library(dplyr)
 library(cowplot)
 library(plotly) # gráficos interactivos
+library(visualize)
 
 # Variables globales par función de distribución NORMAL en plotDist()
 x11 <- NULL
@@ -283,7 +284,7 @@ f.tabla_binom <- function(n, exito) {
   tabla
 }
 
-# 14 Oct 2022
+# 14 Abr 2023
 # Función para devuelve tabla binomial, VE Varianza y Desv. Std
 # de una distribución binomial. 
 f.binom.all <- function(n, exito){
@@ -358,13 +359,14 @@ f.binom.all <- function(n, exito){
            yaxis = list(title = "Función Acumulada F(X)")
     )
   
-  
+
   distribucion <- list(tabla = tabla, VE = VE, 
                        varianza = varianza, desv.std = desv.std, 
                        g.dens = g.dens, 
                        g.hist = g.hist,
                        g.acum = g.acum,
                        g.text = g.text,
+                       g_barra = g_barra,
                        g_barra = g_barra,
                        g.hist.plotly = g.hist.plotly,
                        g.acum.plotly = g.acum.plotly,
@@ -488,6 +490,15 @@ f.hiper.all <- function(exitosos, muestra, poblacion){
                                                                     "var=", round(varianza, 2), ";",
                                                                     "sd=", round(desv.std, 2))
     )
+  
+  t_dist <- 'Distribución Hipergeométrica'
+  g_barra <- ggplot(data = tabla, aes(x = x, y=f.x , fill=x)) +
+    geom_bar(stat="identity") +
+    geom_vline(xintercept = VE, color = 'red', linetype = "dashed", size = 1) +
+    geom_vline(xintercept = VE - desv.std, color = 'blue', linetype = "dashed", size = 1) +
+    geom_vline(xintercept = VE + desv.std, color = 'blue', linetype = "dashed", size = 1) +
+    labs(title=t_dist, subtitle = paste("VE", round(VE, 2), "± Desv. Std", round(desv.std, 2)), x="Variable X", y="Probabilidad")
+  
   g.hist.plotly <- plot_ly(
     x = c(tabla$x),
     y = c(tabla$f.x),
@@ -511,7 +522,9 @@ f.hiper.all <- function(exitosos, muestra, poblacion){
   
   distribucion <- list(tabla = tabla, VE = VE, 
                        varianza = varianza, desv.std = desv.std,
-                       g.dens = g.dens, g.hist = g.hist, g.acum = g.acum, g.text = g.text,
+                       g.dens = g.dens, g.hist = g.hist, 
+                       g_barra = g_barra, 
+                       g.acum = g.acum, g.text = g.text,
                        g.hist.plotly = g.hist.plotly, g.acum.plotly = g.acum.plotly,
                        g_all = f.hist.dens.discreta(tabla))
   
@@ -595,6 +608,15 @@ f.poisson.all <- function(media) {
             subtitle = paste("ve=", VE, ";", "var=", round(varianza, 2), ";", "sd=", round(desv.std, 2))
     )
   
+  t_dist <- 'Distribución Poisson'
+  g_barra <- ggplot(data = tabla, aes(x = x, y=f.x , fill=x)) +
+    geom_bar(stat="identity") +
+    geom_vline(xintercept = VE, color = 'red', linetype = "dashed", size = 1) +
+    geom_vline(xintercept = VE - desv.std, color = 'blue', linetype = "dashed", size = 1) +
+    geom_vline(xintercept = VE + desv.std, color = 'blue', linetype = "dashed", size = 1) +
+    labs(title=t_dist, subtitle = paste("VE", round(VE, 2), "± Desv. Std", round(desv.std, 2)), x="Variable X", y="Probabilidad")
+  
+  
   g.hist.plotly <- plot_ly(
     x = c(tabla$x),
     y = c(tabla$f.x),
@@ -618,6 +640,7 @@ f.poisson.all <- function(media) {
   distribucion <- list(tabla = tabla, VE = VE, 
                        varianza = varianza, desv.std = desv.std,
                        g.dens = g.dens, g.hist = g.hist, g.acum = g.acum, g.text = g.text,
+                       g_barra = g_barra,
                        g.hist.plotly = g.hist.plotly, g.acum.plotly = g.acum.plotly,
                        g_all = f.hist.dens.discreta(tabla))
   
@@ -690,7 +713,7 @@ f.normal.all <- function(media, desv.std, x1, x2, tipo) {
   
   
   # Se construye un conjunto de datos aleatorios
-  #  generados con caracerísticas de distribución normal
+  #  generados con características de distribución normal
   set.seed(2022)
   x <- sort(rnorm(n = 1000, mean = media, sd = desv.std))
   datos <- data.frame(x=x, 
@@ -779,6 +802,96 @@ f.normal.all <- function(media, desv.std, x1, x2, tipo) {
   return(distribucion)
   
 }
+
+
+# 26 Abril 2022
+# Distribución exponencial
+# Recibe media e intervalo, devuelve una lista con varios estadísticos y gráficos
+f_exponencial_all <- function(media, intervalo, tipo = 1) {
+  
+  # tipo == 1 izquierda
+  # tipo == 2 derecha
+  # tipo == 3 intervalo
+    
+    lambda = 1/media
+    
+    a <- intervalo[1]
+    b <- intervalo[2]
+    
+    # x's
+    x = seq(from = 0, to=(media*2), by=0.5)
+    # Densidad
+    f.x <- round(dexp(x = x, rate = lambda), 6)
+    f.x
+    
+    # Acumulada
+    F.x <- round(pexp(q = x, rate =  lambda), 6)
+    F.x
+    
+    datos <- data.frame(x = x, f.x = f.x, F.x = F.x)
+
+    VE <- 1/lambda
+    varianza = 1 / (lambda ^2)
+    desv.std = sqrt(varianza)
+    
+
+  # Cola izquierda
+  if (tipo == 1) {
+      prob <- round(pexp(q = b, rate = lambda), 6)
+      datos <- data.frame(x = x, f.x = f.x, F.x = F.x)
+      datos <- cbind(datos, p = ifelse(datos$x <= b , 'p', 'q'))
+      datos$p <- as.factor(datos$p)
+      g_curva <- ggplot(data = datos, aes(x = x, y = f.x, fill = p))  +
+        geom_area(alpha = 0.5, position = "identity") +
+        scale_fill_manual(values = c("red", "dodgerblue4")) +
+        labs(title=paste("Probabilidad F(x ≤", b, ")=",prob ), 
+             subtitle = paste("VE", VE, "Desv.Std=", desv.std)) +
+        xlab("x's") +
+        ylab("f(x)")
+
+  }
+    
+
+    # Cola derecha
+    if (tipo == 2) {
+      prob <- round(pexp(q = b, rate = lambda, lower.tail = FALSE), 6)
+      datos <- data.frame(x = x, f.x = f.x, F.x = F.x)
+      datos <- cbind(datos, p = ifelse(datos$x >= b , 'q', 'p'))
+      datos$p <- as.factor(datos$p)
+      g_curva <- ggplot(data = datos, aes(x = x, y = f.x, fill = p))  +
+        geom_area(alpha = 0.5, position = "identity") +
+        scale_fill_manual(values = c("dodgerblue4", "red")) +
+        labs(title=paste("Probabilidad F(x ≥", b, ")=",prob ), 
+             subtitle = paste("VE", VE, "Desv.Std=", desv.std)) +
+        xlab("x's") +
+        ylab("f(x)")
+      
+    }      
+    
+  # Intervalo
+  if (tipo == 3) {
+    prob <- round(pexp(q = b, rate = lambda) - pexp(q = a, rate = lambda), 6)
+    datos <- data.frame(x = x, f.x = f.x, F.x = F.x)
+    datos <- cbind(datos, p = ifelse(datos$x >= a & datos$x <= b , 'p', 'q'))
+    datos$p <- as.factor(datos$p)
+    
+    g_curva<- ggplot(data = datos, aes(x = x, y = f.x, fill = p))  +
+        geom_area(alpha = 0.5, position = "identity") +
+        scale_fill_manual(values = c("red", "dodgerblue4")) +
+        labs(title=paste("Densidad F(",a , "≤ x ≤", b, ")=",prob ), 
+             subtitle = paste("VE", VE, "Desv.Std=", desv.std)) +
+        xlab("x's") +
+        ylab("f(x)")
+      
+    }
+    
+    
+    distribucion = list(VE = VE, varianza = varianza, desv.std = desv.std, 
+                        prob = prob,
+                        g_curva = g_curva)
+    return(distribucion)  
+}
+  
 
 
 # Función para devolver el valor de z
