@@ -555,7 +555,7 @@ f.prob.poisson <- function (media, x) {
 }
 
 
-# 19 OCT 2022
+# 12 Mayo 2023
 # Función para devolver una lista con tabla de distribución valor esperado
 # varianza desviación estándar y algunos gráficos 
 # de una distribución Poisson
@@ -819,7 +819,7 @@ f_exponencial_all <- function(media, intervalo, tipo = 1) {
     b <- intervalo[2]
     
     # x's
-    x = seq(from = 0, to=(media*3), by=0.001)
+    x = seq(from = 0, to=(media*2), by=0.5)
     # Densidad
     f.x <- round(dexp(x = x, rate = lambda), 6)
     f.x
@@ -830,9 +830,9 @@ f_exponencial_all <- function(media, intervalo, tipo = 1) {
     
     datos <- data.frame(x = x, f.x = f.x, F.x = F.x)
 
-    VE <- round(1 / lambda, 4)
-    varianza = round(1 / (lambda ^2), 4)
-    desv.std = round(sqrt(varianza), 4)
+    VE <- 1/lambda
+    varianza = 1 / (lambda ^2)
+    desv.std = sqrt(varianza)
     
 
   # Cola izquierda
@@ -905,12 +905,10 @@ f.devolver.z.prueba <- function(media.m, desv.p, media.p, n) {
   z
 }
 
-
 f.devolver.t.prueba <- function(media.m, desv.m, media.p, n) {
   t <- (media.m - media.p) / (desv.m / sqrt(n))
   t
 }
-
 
 
 # Función para devolver Z para Intervalo de Confianza
@@ -946,44 +944,22 @@ f.intervalo.confianza.z <- function (media, desv, confianza, n) {
 
 
 # Función para devolver t para Intervalo de Confianza
-# Recibe confianza en valor relativo, n y tipo que puede ser "izq", "der", "ambos"
-f.t.int.conf <- function (confianza, n, cola) {
-  gl <- n-1
-  if (cola == "izq" ) {
-    alfa = 1 - confianza
-    t <- qt(p = alfa, df = gl)
-  }
-  if (cola == "der" ) {
-    alfa = 1 - confianza
-    t <- qt(p = alfa, df = gl, lower.tail = FALSE)
-  }
+f.t.int.conf <- function (confianza, n) {
+  alfa = 1 - confianza
+  #alfa
   
-  if (cola == "ambas" ) {
-    alfa = (1 - confianza) / 2
-    t <- qt(p = alfa, df = gl)
-    t = abs(t)
-  }
-
-  return (t)
+  v.critico <- 1 - (alfa / 2)
+  #v.critico
+  
+  t <- qt(v.critico, n-1)
+  t
 }
 
 # Función para devolver el intervalo de confianza t
 # a cuatro posiciones decimales
-# recibe media, desv, confianza, n y tipo [1 = "izq", 2 = "der", 3 = "ambos"]
-f.intervalo.confianza.t <- function (media, desv, confianza, n, tipo) {
-  if (tipo == 1) { # cola izquierda
-    li <- media - (f.t.int.conf(confianza, n, cola = "izq") * desv / sqrt(n)) 
-    ls <- Inf
-  }
-  if (tipo == 2) { # cola derecha
-    li <- -Inf
-    ls <- media + f.t.int.conf(confianza, n, cola = "der") * desv / sqrt(n)
-  }
-  if (tipo == 3) { # ambas colas
-    li <- media - f.t.int.conf(confianza, n, cola = "ambas") * desv / sqrt(n)
-    ls <- media + f.t.int.conf(confianza, n, cola = "ambas") * desv / sqrt(n)
-  }
-  
+f.intervalo.confianza.t <- function (media, desv, confianza, n) {
+  li <- media - f.t.int.conf(confianza, n) * desv / sqrt(n) 
+  ls <- media + f.t.int.conf(confianza, n) * desv / sqrt(n) 
   
   round(c(li, ls),4)
 }
