@@ -648,8 +648,18 @@ f.poisson.all <- function(media) {
   
 }
 
+# 25-05-2023
 # Devuelve estadísticos y gráfica de distribución uniforme
 f_unif_all <- function(min, max, a, b, tipo) {
+  
+  # Valor esperado
+  VE <- round((min + max) / 2, 2) 
+  
+  # Varianza
+  varianza <- round((b.max - a.min)^2 / 12, 2)
+  
+  # Desviación estándar
+  desv.std <- round(sqrt(varianza), 2)
   
   dens <- dunif(x = min, min = min, max = max)
   x <- c(min, max)
@@ -666,10 +676,7 @@ f_unif_all <- function(min, max, a, b, tipo) {
     geom_area(aes(x = x, y = y),
               fill = 'lightblue') +
     geom_area(aes(x = x2, y = y2),
-              fill = 'pink') +
-    ggtitle(label = "Distribución uniforme continua", 
-            subtitle = paste("f(x) = ",dens, "F(x) =", prob))
-   
+              fill = 'pink') 
   }
   if (tipo == 2) { # Derecha
     prob <- round(punif(q = b, min = min, max = max, lower.tail = FALSE), 4)
@@ -681,10 +688,8 @@ f_unif_all <- function(min, max, a, b, tipo) {
       geom_area(aes(x = x, y = y),
                 fill = 'pink') +
       geom_area(aes(x = x2, y = y2),
-                fill = 'lightblue') +
-      ggtitle(label = "Distribución uniforme continua", 
-              subtitle = paste("f(x) = ",dens, "F(x) =", prob))
-  }
+                fill = 'lightblue')
+       }
   if (tipo == 3) { # Ambos intervalo a y b
     prob <- round(punif(q = b, min = min, max = max) - punif(q = a, min = min, max = max), 4)
     datos <- data.frame(x = x, y=y, x2 = x2, y2 = y, prob = prob)
@@ -694,13 +699,19 @@ f_unif_all <- function(min, max, a, b, tipo) {
       geom_area(aes(x = x, y = y),
                 fill = 'lightblue') +
       geom_area(aes(x = x2, y = y2),
-                fill = 'pink') +
-      ggtitle(label = "Distribución uniforme continua", 
-              subtitle = paste("f(x) = ",dens, "F(x) =", prob))
+                fill = 'pink') 
   }
+  
+ 
+  g <- g + ggtitle(label = "Distribución uniforme continua", 
+                   subtitle = paste("f(x) = ",dens, "; F(x) =", prob, "; VE:", VE, "; ds=", desv.std)) +
+    geom_vline(xintercept = VE, color='red', linetype = "dashed", size = 1) +
+    geom_vline(xintercept = VE - desv.std, color = 'blue', linetype = "dashed", size = 1) +
+    geom_vline(xintercept = VE + desv.std, color = 'blue', linetype = "dashed", size = 1)
 
   
-  distribucion <- list(dens = dens, prob = prob, g =g)
+  distribucion <- list(dens = dens, prob = prob, g =g,
+                       VE = VE, varianza = varianza, desv.std = desv.std)
   
   return(distribucion)
 }
