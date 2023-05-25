@@ -648,6 +648,64 @@ f.poisson.all <- function(media) {
   
 }
 
+# Devuelve estadísticos y gráfica de distribución uniforme
+f_unif_all <- function(min, max, a, b, tipo) {
+  
+  dens <- dunif(x = min, min = min, max = max)
+  x <- c(min, max)
+  y <- c(dens, dens)
+  x2 <- c(a, b)
+  y2 <- y
+
+ if (tipo == 1) { # Izquierda
+   prob <- round(punif(q = b, min = min, max = max), 4)
+   datos <- data.frame(x = x, y=y, x2 = x2, y2 = y, prob = prob)
+   datos
+   
+  g <- ggplot(datos) + 
+    geom_area(aes(x = x, y = y),
+              fill = 'lightblue') +
+    geom_area(aes(x = x2, y = y2),
+              fill = 'pink') +
+    ggtitle(label = "Distribución uniforme continua", 
+            subtitle = paste("f(x) = ",dens, "F(x) =", prob))
+   
+  }
+  if (tipo == 2) { # Derecha
+    prob <- round(punif(q = b, min = min, max = max, lower.tail = FALSE), 4)
+    
+    datos <- data.frame(x = x, y=y, x2 = x2, y2 = y, prob = prob)
+    datos
+    
+    g <- ggplot(datos) + 
+      geom_area(aes(x = x, y = y),
+                fill = 'pink') +
+      geom_area(aes(x = x2, y = y2),
+                fill = 'lightblue') +
+      ggtitle(label = "Distribución uniforme continua", 
+              subtitle = paste("f(x) = ",dens, "F(x) =", prob))
+  }
+  if (tipo == 3) { # Ambos intervalo a y b
+    prob <- round(punif(q = b, min = min, max = max) - punif(q = a, min = min, max = max), 4)
+    datos <- data.frame(x = x, y=y, x2 = x2, y2 = y, prob = prob)
+    datos
+    
+    g <- ggplot(datos) + 
+      geom_area(aes(x = x, y = y),
+                fill = 'lightblue') +
+      geom_area(aes(x = x2, y = y2),
+                fill = 'pink') +
+      ggtitle(label = "Distribución uniforme continua", 
+              subtitle = paste("f(x) = ",dens, "F(x) =", prob))
+  }
+
+  
+  distribucion <- list(dens = dens, prob = prob, g =g)
+  
+  return(distribucion)
+}
+
+
 # Devuelve el valor de t para una distribución T Student
 f.devolver.t <- function(media.muestra, media.pob, desv.muestra, n) {
   t <- (media.muestra - media.pob) / (desv.muestra / sqrt(n))
