@@ -656,7 +656,7 @@ f_unif_all <- function(min, max, a, b, tipo) {
   VE <- round((min + max) / 2, 2) 
   
   # Varianza
-  varianza <- round((b.max - a.min)^2 / 12, 2)
+  varianza <- round((max - min)^2 / 12, 2)
   
   # Desviación estándar
   desv.std <- round(sqrt(varianza), 2)
