@@ -947,7 +947,7 @@ f_exponencial_all <- function(media, intervalo, tipo = 1) {
     g_curva<- ggplot(data = datos, aes(x = x, y = f.x, fill = p))  +
         geom_area(alpha = 0.5, position = "identity") +
         scale_fill_manual(values = c("red", "dodgerblue4")) +
-        labs(title=paste("Densidad F(",a , "≤ x ≤", b, ")=",prob ), 
+        labs(title=paste("Probabilidad F(",a , "≤ x ≤", b, ")=",prob ), 
              subtitle = paste("VE", VE, "Desv.Std=", desv.std)) +
         xlab("x's") +
         ylab("f(x)")
