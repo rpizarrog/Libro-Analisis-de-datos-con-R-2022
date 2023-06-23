@@ -911,7 +911,7 @@ f_exponencial_all <- function(media, intervalo, tipo = 1) {
       datos <- cbind(datos, p = ifelse(datos$x <= b , 'p', 'q'))
       datos$p <- as.factor(datos$p)
       g_curva <- ggplot(data = datos, aes(x = x, y = f.x, fill = p))  +
-        geom_area(alpha = 0.1, position = "identity") +
+        geom_area(alpha = 0.5, position = "identity") +
         scale_fill_manual(values = c("red", "dodgerblue4")) +
         labs(title=paste("Probabilidad F(x ≤", b, ")=",prob ), 
              subtitle = paste("VE", VE, "Desv.Std=", desv.std)) +
@@ -928,7 +928,7 @@ f_exponencial_all <- function(media, intervalo, tipo = 1) {
       datos <- cbind(datos, p = ifelse(datos$x >= b , 'q', 'p'))
       datos$p <- as.factor(datos$p)
       g_curva <- ggplot(data = datos, aes(x = x, y = f.x, fill = p))  +
-        geom_area(alpha = 0.1, position = "identity") +
+        geom_area(alpha = 0.5, position = "identity") +
         scale_fill_manual(values = c("dodgerblue4", "red")) +
         labs(title=paste("Probabilidad F(x ≥", b, ")=",prob ), 
              subtitle = paste("VE", VE, "Desv.Std=", desv.std)) +
@@ -945,7 +945,7 @@ f_exponencial_all <- function(media, intervalo, tipo = 1) {
     datos$p <- as.factor(datos$p)
     
     g_curva<- ggplot(data = datos, aes(x = x, y = f.x, fill = p))  +
-        geom_area(alpha = 0.1, position = "identity") +
+        geom_area(alpha = 0.5, position = "identity") +
         scale_fill_manual(values = c("red", "dodgerblue4")) +
         labs(title=paste("Densidad F(",a , "≤ x ≤", b, ")=",prob ), 
              subtitle = paste("VE", VE, "Desv.Std=", desv.std)) +
