@@ -666,17 +666,17 @@ f_unif_all <- function(min, max, a, b, tipo) {
   y <- c(dens, dens)
   x2 <- c(a, b)
   y2 <- y
-
- if (tipo == 1) { # Izquierda
-   prob <- round(punif(q = b, min = min, max = max), 4)
-   datos <- data.frame(x = x, y=y, x2 = x2, y2 = y, prob = prob)
-   datos
-   
-  g <- ggplot(datos) + 
-    geom_area(aes(x = x, y = y),
-              fill = 'lightblue') +
-    geom_area(aes(x = x2, y = y2),
-              fill = 'pink') 
+  
+  if (tipo == 1) { # Izquierda
+    prob <- round(punif(q = b, min = min, max = max), 4)
+    datos <- data.frame(x = x, y=y, x2 = x2, y2 = y, prob = prob)
+    datos
+    
+    g <- ggplot(datos) + 
+      geom_area(aes(x = x, y = y),
+                fill = 'lightblue') +
+      geom_area(aes(x = x2, y = y2),
+                fill = 'pink') 
   }
   if (tipo == 2) { # Derecha
     prob <- round(punif(q = b, min = min, max = max, lower.tail = FALSE), 4)
@@ -689,7 +689,7 @@ f_unif_all <- function(min, max, a, b, tipo) {
                 fill = 'pink') +
       geom_area(aes(x = x2, y = y2),
                 fill = 'lightblue')
-       }
+  }
   if (tipo == 3) { # Ambos intervalo a y b
     prob <- round(punif(q = b, min = min, max = max) - punif(q = a, min = min, max = max), 4)
     datos <- data.frame(x = x, y=y, x2 = x2, y2 = y, prob = prob)
@@ -702,13 +702,13 @@ f_unif_all <- function(min, max, a, b, tipo) {
                 fill = 'pink') 
   }
   
- 
+  
   g <- g + ggtitle(label = "Distribución uniforme continua", 
                    subtitle = paste("f(x) = ",dens, "; F(x) =", prob, "; VE:", VE, "; ds=", desv.std)) +
     geom_vline(xintercept = VE, color='red', linetype = "dashed", size = 1) +
     geom_vline(xintercept = VE - desv.std, color = 'blue', linetype = "dashed", size = 1) +
     geom_vline(xintercept = VE + desv.std, color = 'blue', linetype = "dashed", size = 1)
-
+  
   
   distribucion <- list(dens = dens, prob = prob, g =g,
                        VE = VE, varianza = varianza, desv.std = desv.std)
@@ -766,6 +766,7 @@ f.normal.all <- function(media, desv.std, x1, x2, tipo) {
     prob.str <- "(Cola derecha. Prob = "
     prob.str <- paste(prob.str, prob, ")")
   }
+  # Intervalo izquierda y derecha se utiliza x1 y x2
   if (tipo == 3) {
     prob.str <- "(Intervalo. Prob = "
     if (is.null(x1) | is.null(x2)) {
@@ -812,7 +813,7 @@ f.normal.all <- function(media, desv.std, x1, x2, tipo) {
             subtitle = subtitulo)
   
   
-  # plotDist()
+  # plotDist() y visualize.norm()
   if (tipo == 1) {
     g.plotDist <- plotDist(dist = "norm", mean = media, sd = desv.std, 
                            groups = x <= x11, type = "h", 
@@ -821,7 +822,7 @@ f.normal.all <- function(media, desv.std, x1, x2, tipo) {
                            main=titulo,
                            sub = prob.str)
     
-    
+
   }
   
   if (tipo == 2) {
@@ -843,7 +844,7 @@ f.normal.all <- function(media, desv.std, x1, x2, tipo) {
                            ylab = "Densidad f(x)", 
                            main=titulo,
                            sub = prob.str)
-    
+
     
   }
   # Plot_ly()
@@ -947,7 +948,7 @@ f_exponencial_all <- function(media, intervalo, tipo = 1) {
     g_curva<- ggplot(data = datos, aes(x = x, y = f.x, fill = p))  +
         geom_area(alpha = 0.5, position = "identity") +
         scale_fill_manual(values = c("red", "dodgerblue4")) +
-        labs(title=paste("Probabilidad F(",a , "≤ x ≤", b, ")=",prob ), 
+        labs(title=paste("Densidad F(",a , "≤ x ≤", b, ")=",prob ), 
              subtitle = paste("VE", VE, "Desv.Std=", desv.std)) +
         xlab("x's") +
         ylab("f(x)")
@@ -1079,3 +1080,34 @@ f.prob.discr <- function(datos, discreta, tipo) {
   }
   salida
 }
+
+# Mayo 2023
+# Función que devuelve la densidad de una variable x de una chi cuadrada
+f_densidad_chi <- function(x, gl) {
+  e <- exp(1) # euler
+ # gm <- gamma() # gamma 
+             # 1 * (x ^(gl/2-1) * e ^(-x/2))
+  numerador <- 1 * (x ^(gl/2-1) * e ^(-x/2))
+  denominador <- 2^(gl/2) * gamma(gl/2)
+  f_x_cuadrado <- numerador / denominador
+  f_x_cuadrado
+}
+
+# función para devolver el intervalo de confianza
+# de la variabilidad de una población 
+# recibe el valor de la varianza de la muestra
+# recibe los grados de libertad
+# recibe el nivel de confianza en valor relativo
+# Para convertir a desviación estándar solo hay que sacar raiz cuadrada
+# porque los valores se devuelven en varianza
+f_IC_variabilidad <- function(varianza, gl, confianza) {
+  alfa <- (1 - confianza) / 2
+  x1 <- qchisq(p = alfa, df = gl) # Izquierda
+  x2 <- qchisq(p = alfa, df = gl, lower.tail = FALSE) # Derecha
+  IC <- NULL
+  IC[1] <- gl * varianza / x2
+  IC[2] <- gl * varianza / x1
+  return(IC)
+} 
+
+
