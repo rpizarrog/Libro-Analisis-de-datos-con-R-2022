@@ -60,6 +60,7 @@ f_nmuestra_coef_E_p_N <- function(confianza, E, p, N) {
 # el margen de error, la proporción p y el valor de la población N
 # devuelve tamaño de muestra
 # Julio 2023
+# Es alternativa 2
 f_nmuestra_2_coef_E_p_N <- function(confianza, E, p, N) {
   numerador <- (f_confianza_z(confianza)^2 * p * (1-p) / E^2)
   denominador <- 1 + (f_confianza_z(confianza)^2 * p * (1-p)) / (E^2 * N)
