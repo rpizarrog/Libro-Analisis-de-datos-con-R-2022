@@ -35,3 +35,23 @@ f_nmuestra_coef_desv_E <- function(confianza, desv_std, E) {
   n = (f_confianza_z(confianza)^2 * desv_std^2) / E^2
   return (n)
 }
+
+# Recibe coeficiente de confianza, 
+# el margen de error y la proporcion p
+# devuelve tamaño de muestra
+# Julio 2023
+f_nmuestra_coef_E_p <- function(confianza, E, p) {
+  n = (f_confianza_z(confianza)^2 * p * (1-p)) / E^2
+  return (n)
+}
+
+# Recibe coeficiente de confianza, 
+# el margen de error, la proporcion p y el valor de la población N
+# devuelve tamaño de muestra
+# Julio 2023
+f_nmuestra_coef_E_p_N <- function(confianza, E, p, N) {
+  numerador <- (f_confianza_z(confianza)^2 * N * p * (1-p))
+  denominador <- (E^2 * (N-1) + f_confianza_z(confianza)^2 * p * (1-p))
+  n = numerador / denominador
+  return (n)
+}
