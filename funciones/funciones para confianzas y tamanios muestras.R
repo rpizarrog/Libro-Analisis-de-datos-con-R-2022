@@ -106,24 +106,29 @@ f_hist_dens_em <- function(poblacion, muestra, contexto="datos de") {
   
   # Construyen el histograma de población y de muestra
   # Histograma con densidad
+   
+  # La población
   gp <- ggplot(poblacion, aes(x = poblacion[,2])) + 
     geom_histogram(aes(y = ..density..),
                    bins = 30, colour = 1, fill = "gray") +
     labs(title = paste("Población", contexto),
          subtitle = paste("ME=", media.p, "; ds=", desv.p),
-         caption = "Fuente propia") +  
-    
+         caption = "Fuente propia") + 
     geom_vline(xintercept = media.p, col='red', linetype = "dashed", size = 1) +
     geom_vline(xintercept = media.p - desv.p, col='blue', linetype = "dashed", size = 1) +
     geom_vline(xintercept = media.p + desv.p, col='blue', linetype = "dashed", size = 1) +
     geom_density(lwd = 1.2,
                  linetype = 2,
                  colour = 2)
-  gp <- gp + theme(
+  
+    gp <- gp + labs(x = colnames(poblacion[2]))
+  
+    gp <- gp + theme(
     plot.title = element_text(color = "black", size = 12, face = "bold"),
-    plot.subtitle = element_text(color = "black",size=7),
-    plot.caption = element_text(color = "black", face = "italic", size=6)
+    plot.subtitle = element_text(color = "black",size=7)
   )
+
+    # La muestra
   gm <- ggplot(muestra, aes(x = muestra[,2])) + 
     geom_histogram(aes(y = ..density..),
                    bins = 30, colour = 1, fill = "gray") +
@@ -132,15 +137,18 @@ f_hist_dens_em <- function(poblacion, muestra, contexto="datos de") {
     geom_vline(xintercept = media.m + desv.m, col='blue', linetype = "dashed", size = 1) +
     labs(title = paste("Muestra",contexto),
          subtitle = paste("me=", media.m, "; ds.=",desv.m,"; er me=",dif.media,"; er ds=",dif.desv),
+         xlab("Algo"), 
          caption = "Fuente propia") +
     geom_density(lwd = 1.2,
                  linetype = 2,
                  colour = 2)
+  gm <- gm + labs(x = colnames(poblacion[2]))
+  
   gm <- gm + theme(
     plot.title = element_text(color = "black", size = 12, face = "bold"),
-    plot.subtitle = element_text(color = "black",size=7),
-    plot.caption = element_text(color = "black", face = "italic", size=6)
+    plot.subtitle = element_text(color = "black",size=7)
   )
+  
   lista <- list(tabla_err_muestrales = tabla_err_muestrales, gp = gp, gm = gm)
   
   return (lista)
