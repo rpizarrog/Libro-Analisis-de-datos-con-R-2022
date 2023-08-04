@@ -125,7 +125,7 @@ f_hist_dens_em <- function(poblacion, muestra, contexto="datos de") {
   
     gp <- gp + theme(
     plot.title = element_text(color = "black", size = 12, face = "bold"),
-    plot.subtitle = element_text(color = "black",size=7)
+    plot.subtitle = element_text(color = "black",size=6)
   )
 
     # La muestra
@@ -145,7 +145,7 @@ f_hist_dens_em <- function(poblacion, muestra, contexto="datos de") {
   
   gm <- gm + theme(
     plot.title = element_text(color = "black", size = 12, face = "bold"),
-    plot.subtitle = element_text(color = "black",size=7)
+    plot.subtitle = element_text(color = "black",size=6)
   )
   
   lista <- list(tabla_err_muestrales = tabla_err_muestrales, gp = gp, gm = gm)
