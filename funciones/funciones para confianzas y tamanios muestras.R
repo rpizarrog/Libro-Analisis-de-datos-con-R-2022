@@ -92,10 +92,10 @@ f_hist_dens_em <- function(poblacion, muestra, contexto="datos de") {
   
   # Los errores muestrales
   # Solo se visualizarán la media aritmética y la desviación std
-  dif.media <- abs(round(media.p - media.m, 2))
-  dif.desv <- abs(round(desv.p - desv.m, 2))
-  dif.max <- abs(round(maximo.p - minimo.p, 2))
-  dif.min <- abs(round(minimo.p - minimo.m, 2))
+  dif.media <- abs(round(media.p - media.m, 4))
+  dif.desv <- abs(round(desv.p - desv.m, 4))
+  dif.max <- abs(round(maximo.p - minimo.p, 4))
+  dif.min <- abs(round(minimo.p - minimo.m, 4))
   
   # Construyendo la tabla para identificar los errores muestrales
   datos_err_muestrales <- data.frame("parámetros" = c(media.p, desv.p, maximo.p, minimo.p), "estadísticos" = c(media.m, desv.m, maximo.m, minimo.m))
