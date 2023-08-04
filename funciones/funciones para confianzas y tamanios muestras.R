@@ -136,8 +136,7 @@ f_hist_dens_em <- function(poblacion, muestra, contexto="datos de") {
     geom_vline(xintercept = media.m - desv.m, col='blue', linetype = "dashed", size = 1) +
     geom_vline(xintercept = media.m + desv.m, col='blue', linetype = "dashed", size = 1) +
     labs(title = paste("Muestra",contexto),
-         subtitle = paste("me=", media.m, "; ds.=",desv.m,"; er me=",dif.media,"; er ds=",dif.desv),
-         xlab("Algo"), 
+         subtitle = paste("me=", media.m, "; ds.=",desv.m,"; er me=",dif.media,"; er ds=",dif.desv), 
          caption = "Fuente propia") +
     geom_density(lwd = 1.2,
                  linetype = 2,
