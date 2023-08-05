@@ -153,3 +153,35 @@ f_hist_dens_em <- function(poblacion, muestra, contexto="datos de") {
   return (lista)
 }
 
+
+# Funicón 
+# Julio 2023
+f_genera_muestras <- function (poblacion, q, n) {
+  
+  # Genera las muestras
+  muestras = as.list(NULL)
+  m_muestras = NULL
+  for (i in 1:q) {
+    muestras[[i]] <- sample(x = sueldos$sueldo, size = n, replace = FALSE)
+    
+    m_muestras[i] <- mean(muestras[[i]])
+  }
+  
+  media_muestral = mean(m_muestras)
+  
+  # Costruye la distribución muestral
+  lasmuestras <- data.frame(muestras)
+  lasmuestras <- data.frame(t(lasmuestras))
+  colnames(lasmuestras) <- paste0("sueldo",1:n)
+  rownames(lasmuestras) <- paste0("M",1:q)
+  tabla_dist_muestral <- data.frame(lasmuestras[,1:3], "..."="...", lasmuestras[,(n-2):n], medias_muestrales = m_muestras)
+  
+  
+  lista <- list(muestras = muestras, m_muestras = m_muestras, 
+                media_muestral = media_muestral,
+                tabla_dist_muestral = tabla_dist_muestral)
+  
+  return(lista)
+  
+}
+
