@@ -158,7 +158,7 @@ f_hist_dens_em <- function(poblacion, muestra, contexto="datos de") {
 # Julio 2023
 f_genera_muestras <- function (poblacion, q, n) {
   
-  # Genera las muestras
+  # Genera y construye las muestras
   muestras = as.list(NULL)
   m_muestras = NULL
   for (i in 1:q) {
@@ -169,7 +169,7 @@ f_genera_muestras <- function (poblacion, q, n) {
   
   media_muestral = mean(m_muestras)
   
-  # Costruye la distribución muestral
+  # Construye la distribución muestral
   lasmuestras <- data.frame(muestras)
   lasmuestras <- data.frame(t(lasmuestras))
   colnames(lasmuestras) <- paste0("sueldo",1:n)
@@ -185,3 +185,40 @@ f_genera_muestras <- function (poblacion, q, n) {
   
 }
 
+
+# Recibe un conjunto de datos de una columna
+# Devuelve histograma
+# Julio 2023
+f_histograma <- function (datos, contexto) {
+  media <- round(mean(datos[,1]), 4)
+  desv_std <- round(sd(datos[,1]), 4)
+  
+  g <- ggplot(datos, aes(x = datos[,1])) + 
+    geom_histogram(aes(y = ..density..),
+                   colour = 1, fill = "gray", bins = 30) +
+    labs(title = paste("Datos de ", contexto),
+         subtitle = paste("N=",nrow(datos)," Me=", media, "ds", desv_std),
+         caption = "Fuente propia") +  
+    geom_vline(xintercept = media, col='red', linetype = "dashed", size = 1) +
+    geom_vline(xintercept = media - desv_std, col='blue', linetype = "dashed", size = 1) +
+    geom_vline(xintercept = media + desv_std, col='blue', linetype = "dashed", size = 1) +
+    geom_density(lwd = 1.2,
+                 linetype = 2,
+                 colour = 2)
+  
+    geom_density(lwd = 1.2,
+                 linetype = 2,
+                 colour = 2)
+  g <- g + theme(
+    plot.title = element_text(color = "black", size = 12, face = "bold"),
+    plot.subtitle = element_text(color = "black",size=6),
+    plot.caption = element_text(color = "black", face = "italic", size=6)
+  )
+  
+  g <- g + labs(x = colnames(datos[1]))
+  
+  
+  
+  return (g)
+
+}
