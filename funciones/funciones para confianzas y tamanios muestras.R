@@ -162,7 +162,7 @@ f_genera_muestras <- function (poblacion, q, n) {
   muestras = as.list(NULL)
   m_muestras = NULL
   for (i in 1:q) {
-    muestras[[i]] <- sample(x = sueldos$sueldo, size = n, replace = FALSE)
+    muestras[[i]] <- sample(x = poblacion[,2], size = n, replace = FALSE)
     
     m_muestras[i] <- mean(muestras[[i]])
   }
@@ -172,7 +172,7 @@ f_genera_muestras <- function (poblacion, q, n) {
   # Construye la distribución muestral
   lasmuestras <- data.frame(muestras)
   lasmuestras <- data.frame(t(lasmuestras))
-  colnames(lasmuestras) <- paste0("sueldo",1:n)
+  colnames(lasmuestras) <- paste0(colnames(poblacion[2]),1:n)
   rownames(lasmuestras) <- paste0("M",1:q)
   tabla_dist_muestral <- data.frame(lasmuestras[,1:3], "..."="...", lasmuestras[,(n-2):n], medias_muestrales = m_muestras)
   
