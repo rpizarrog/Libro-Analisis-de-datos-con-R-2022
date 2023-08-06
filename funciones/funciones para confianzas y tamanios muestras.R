@@ -217,8 +217,6 @@ f_histograma <- function (datos, contexto) {
   
   g <- g + labs(x = colnames(datos[1]))
   
-  
-  
   return (g)
 
 }
