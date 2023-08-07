@@ -186,14 +186,16 @@ f_genera_muestras <- function (poblacion, q, n) {
 }
 
 
-# Recibe un conjunto de datos de una columna
+# Recibe un conjunto de datos con una estructura de 2 columnas y N registros
+# La primera columna es un valor consecutivo y 
+# La segunda columna es la variable de interés
 # Devuelve histograma
 # Julio 2023
 f_histograma <- function (datos, contexto) {
-  media <- round(mean(datos[,1]), 4)
-  desv_std <- round(sd(datos[,1]), 4)
+  media <- round(mean(datos[,2]), 4)
+  desv_std <- round(sd(datos[,2]), 4)
   
-  g <- ggplot(datos, aes(x = datos[,1])) + 
+  g <- ggplot(datos, aes(x = datos[,2])) + 
     geom_histogram(aes(y = ..density..),
                    colour = 1, fill = "gray", bins = 30) +
     labs(title = paste("Datos de ", contexto),
