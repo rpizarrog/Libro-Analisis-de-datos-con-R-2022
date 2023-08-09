@@ -217,8 +217,15 @@ f_histograma <- function (datos, contexto) {
     plot.caption = element_text(color = "black", face = "italic", size=6)
   )
   
-  g <- g + labs(x = colnames(datos[1]))
+  g <- g + labs(x = colnames(datos[2]))
   
   return (g)
 
+}
+
+# Se calcula la desviación estándar de la población
+f_calcular_ds <- function(poblacion) {
+  media_p <- mean(poblacion)
+  ds <- sqrt((sum((poblacion - media_p) ^ 2)) / (N))
+  return(ds)
 }
