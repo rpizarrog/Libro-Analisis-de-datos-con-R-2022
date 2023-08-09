@@ -229,3 +229,34 @@ f_calcular_ds <- function(poblacion) {
   ds <- sqrt((sum((poblacion - media_p) ^ 2)) / (N))
   return(ds)
 }
+
+
+# Recibe vector que contienen la población y muestra, 
+# además del tamaño de cada muestra 
+# Devuelven el ua lista con rtes estadísticos:
+# error estándar de una población infinita, desviación estándar de la población y 
+# desviación de la distribución muestral o la muestra.
+# Agosto 2023
+f_er_std_finitas <- function(poblacion, muestra, n) {
+  N <- length(poblacion)
+
+  desv_std_p <- sd(poblacion)
+  desv_std_m <- sd(muestra)
+  er_std <- sqrt((N-n)/(N-1)) * (desv_std_p / sqrt(n))
+  
+  lista <- list(er_std = er_std, desv_std_p = desv_std_p, desv_std_m = desv_std_m)
+  return(lista)
+}
+
+
+# Reciben la desviación estándar de una población no conocida y 
+# un vector con la muestra
+# Devuelven el error estándar para población infinita
+f_er_std_infinitas <- function(desv_std_p, muestra, n) {
+  
+  er_std <- sd(desv_std_p / n)
+  desv_std_m <- sd(muestra)
+  
+  lista <- list(er_std = er_std, desv_std_p = desv_std_p, desv_std_m = desv_std_m)
+  return(lista)
+}
