@@ -1112,7 +1112,7 @@ f_IC_variabilidad <- function(varianza, gl, confianza) {
 
 # Mayo 2023
 # Función que devuelve la densidad de una variable x de una F de Fisher
-f_densidad_f <- function(x, gl, gl) {
+f_densidad_f <- function(x, gl) {
   e <- exp(1) # euler
   numerador <- 1 * (x ^(gl/2-1) * e ^(-x/2))
   denominador <- 2^(gl/2) * gamma(gl/2)
