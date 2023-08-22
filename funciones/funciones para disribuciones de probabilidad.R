@@ -1021,6 +1021,7 @@ f.intervalo.confianza.z <- function (media, desv, confianza, n) {
 # recibe el tamaño de muestra n
 # recibe el valor del coeficiente de confianza entre 0 y 100 normalmente 90, 95 o 99
 # devuelve el intervalo de la proporcion
+# Agosto 2023
 f.intervalo.confianza.prop.z <- function (p, n, confianza) {
   prop_m <- p
   q <- 1 - p
