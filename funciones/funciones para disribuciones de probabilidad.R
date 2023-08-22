@@ -994,6 +994,7 @@ f.z.int.conf <- function (confianza) {
 }
 
 
+
 # Función para devolver el intervalo de confianza Z
 # a cuatro posiciones decimales
 f.intervalo.confianza <- function (media, desv, confianza, n) {
@@ -1011,6 +1012,24 @@ f.intervalo.confianza.z <- function (media, desv, confianza, n) {
   round(c(li, ls),4)
 }
 
+
+
+# Agosto 2023
+# Función para devolver el intervalo de confianza de la proporción Z
+# a cuatro posiciones decimales
+# recibe el valor de la proporción muestral en formato decimal entre 0 y 1
+# recibe el tamaño de muestra n
+# recibe el valor del coeficiente de confianza entre 0 y 100 normalmente 90, 95 o 99
+# devuelve el intervalo de la proporcion
+f.intervalo.confianza.prop.z <- function (p, n, confianza) {
+  prop_m <- p
+  q <- 1 - p
+  
+  li <- prop_m - f.z.int.conf(confianza) * sqrt(p * q / n) 
+  ls <- prop_m + f.z.int.conf(confianza) * sqrt(p * q / n)
+  
+  round(c(li, ls),4)
+}
 
 
 # Función para devolver t para Intervalo de Confianza
