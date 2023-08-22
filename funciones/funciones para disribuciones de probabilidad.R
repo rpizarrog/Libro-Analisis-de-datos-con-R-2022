@@ -1025,11 +1025,12 @@ f.intervalo.confianza.z <- function (media, desv, confianza, n) {
 f.intervalo.confianza.prop.z <- function (p, n, confianza) {
   prop_m <- p
   q <- 1 - p
+  em <- f.z.int.conf(confianza) * sqrt(p * q / n)
+  li <- prop_m - em
+  ls <- prop_m + em
   
-  li <- prop_m - f.z.int.conf(confianza) * sqrt(p * q / n) 
-  ls <- prop_m + f.z.int.conf(confianza) * sqrt(p * q / n)
-  
-  round(c(li, ls),4)
+  lista <- list(intervalo = c(li, ls), em = em)
+  return (lista)
 }
 
 
