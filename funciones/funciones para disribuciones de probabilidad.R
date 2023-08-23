@@ -1122,7 +1122,7 @@ f_densidad_chi <- function(x, gl) {
 # Para convertir a desviación estándar solo hay que sacar raiz cuadrada
 # porque los valores se devuelven en varianza
 f_IC_variabilidad <- function(varianza, gl, confianza) {
-  alfa <- (1 - confianza) / 2
+  alfa <- (1 - confianza) / 2 # a dos colas
   x1 <- qchisq(p = alfa, df = gl) # Izquierda
   x2 <- qchisq(p = alfa, df = gl, lower.tail = FALSE) # Derecha
   IC <- NULL
