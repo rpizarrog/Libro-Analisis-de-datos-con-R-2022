@@ -1188,7 +1188,7 @@ f_densidad_chisq_dos_colas <- function (x1, x2, icv){
   min <- min(x)
   max <- max(x)
   # Graficar la densidad de la distribución chi cuadrada
-  curve(chi_sq_density, from = min, to = max,
+  curve(dchisq(x, df = gl), from = min, to = max,
         main = paste("chi cuadrada;", "IC varianza de:", round(icv[1], 4), "a", round(icv[2], 4)), 
         sub=paste("x1=", round(x1, 2), ";", "x2=", round(x2, 2), "; gl=", gl),
         ylab = 'Densidad', lwd = 2, col = 'steelblue') 
