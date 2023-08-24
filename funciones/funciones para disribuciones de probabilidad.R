@@ -1170,7 +1170,7 @@ f_icv_variabilidad <- function(varianza, gl, confianza = c(0.90, 0.95, 0.99)) {
 
 # Agosto 2023
 # Calcula la densidad de chi cuadrada
-# recibe los valores de x y devuvel su densidad distribución chisq
+# recibe los valores de x y devuelve su densidad distribución chisq
 f_chi_sq_density <- function(x) {
   dchisq(x, df = gl)
 }
