@@ -1131,6 +1131,98 @@ f_IC_variabilidad <- function(varianza, gl, confianza) {
   return(IC)
 } 
 
+
+# Función que devuelve estadísticos de los intervalos de confianza
+# al 90%, 95% y 99% do uno específico de la variabilidad de población
+# Recibe el valor de varianza
+# Recib eel valor de grados de libertad (n-1)
+# Recibe el valor de confianza en valores relativos, 
+# en caso de omitir este valor de coeficiente de confianza, , 
+# se inicia con valores de 0.90, 0.95 y 0.99 por default
+# Agosto 2023
+f_icv_variabilidad <- function(varianza, gl, confianza = c(0.90, 0.95, 0.99)) {
+    
+  #print(confianza)
+  # print(gl)
+  alfa <- NULL
+  alfa <- (1 - confianza) / 2 # a dos colas
+  
+  x1 <- NULL
+  x2 <- NULL
+  
+  for (i in 1:length(confianza)) {
+    x1[i] <- qchisq(p = alfa[i], df = gl) # Izquierda
+    x2[i] <- qchisq(p = alfa[i], df = gl, lower.tail = FALSE) # Derecha
+  }
+
+  icv <- NULL
+  xs <- NULL
+  
+  for (i in 1:length(confianza)) {
+    icv[[i]] <- c(gl * varianza / x2[i], gl * varianza / x1[i])
+    xs[[i]] <- c(x1[i], x2[i])
+   }
+  
+  lista <- list(confianza = confianza, xs = xs, icv = icv)
+  return(lista)
+} 
+
+
+# Agosto 2023
+# Calcula la densidad de chi cuadrada
+# recibe los valores de x y devuvel su densidad distribución chisq
+f_chi_sq_density <- function(x) {
+  dchisq(x, df = gl)
+}
+
+
+# Función que dibuja densidad de chi cuadrada con función curve
+# Recibe los valores de x, y los valores de x1 y x2
+# Los valores de x1 y x2 fueron calculados con el nivel
+# de confianza a dos colas
+# Hace la gráfica de la densidad en función de los valores x1 y x2
+# devuelve gráfica
+# Agosto 2023
+f_densidad_chisq_dos_colas <- function (x1, x2, icv){
+  x <- 0:(x2+2)
+  min <- min(x)
+  max <- max(x)
+  # Graficar la densidad de la distribución chi cuadrada
+  curve(chi_sq_density, from = min, to = max,
+        main = paste("chi cuadrada;", "IC varianza de:", round(icv[1], 4), "a", round(icv[2], 4)), 
+        sub=paste("x1=", round(x1, 2), ";", "x2=", round(x2, 2), "; gl=", gl),
+        ylab = 'Densidad', lwd = 2, col = 'steelblue') 
+  
+  
+  # Izquierda
+  # Crear vector de valores izquierda x1 para dos colas
+  x_vector_i <- seq(from = min, to = x1, by = 0.01)
+  
+  # Crear vector de valores de densidad chi-cuadrado para el intervalo
+  p_vector_i <- dchisq(x_vector_i, df = gl)
+  
+  # Rellenar el área bajo la curva del intervalo de confianza
+
+  polygon(x = c(min, x_vector_i, x1), y = c(min, p_vector_i, min), col = "orange", border = 'red')
+  
+  
+  # Derecha
+  # Crear vector de valores izquierda x1 para dos colas
+  x_vector_d <- seq(from = x2, to = max, by = 0.01)
+  
+  # Crear vector de valores de densidad chi-cuadrado para el intervalo
+  p_vector_d <- dchisq(x_vector_d, df = gl)
+  
+  # Rellenar el área bajo la curva del intervalo de confianza
+  polygon(x = c(x2, x_vector_d, max), y = c(min, p_vector_d, min), col = "orange", border = 'red') 
+  
+}
+
+
+
+
+
+
 # Mayo 2023
 # Función que devuelve la densidad de una variable x de una F de Fisher
 f_densidad_f <- function(x, gl) {

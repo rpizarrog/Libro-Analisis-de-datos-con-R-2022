@@ -20,7 +20,8 @@ f_tabla_confianza_z <- function() {
   return (confianza.z)
 }
 
-# Esta función devuelve valo de z a un coeficiente de confianza específico
+# Esta función devuelve valor de z a un coeficiente de confianza específico
+# Se recibe el valor de la confianza en valor entero 90-99
 # Julio 2023
 f_confianza_z <- function(confianza) {
     alfa <- (1 - (confianza / 100)) / 2
@@ -28,16 +29,17 @@ f_confianza_z <- function(confianza) {
     return (z)
 }
 
-# Recibe coeficiente de confianza, valor de desviaión estándar y margen de error y 
-# devuelve tamaño de muestra
+# Recibe coeficiente de confianza entero, 
+# Se valor de desviación estándar y margen de error en valore srelativos y 
+# Se devuelve tamaño de muestra
 # Julio 2023
 f_nmuestra_coef_desv_E <- function(confianza, desv_std, E) {
   n = (f_confianza_z(confianza)^2 * desv_std^2) / E^2
   return (n)
 }
 
-# Recibe coeficiente de confianza, 
-# el margen de error y la proporción p
+# Recibe coeficiente de confianza, valor entero, 
+# el margen de error y la proporción valores relativos
 # devuelve tamaño de muestra
 # Julio 2023
 f_nmuestra_coef_E_p <- function(confianza, E, p) {
@@ -45,7 +47,7 @@ f_nmuestra_coef_E_p <- function(confianza, E, p) {
   return (n)
 }
 
-# Recibe coeficiente de confianza, 
+# Recibe coeficiente de confianza valor entero, 
 # el margen de error, la proporción p y el valor de la población N
 # devuelve tamaño de muestra
 # Julio 2023
@@ -56,8 +58,9 @@ f_nmuestra_coef_E_p_N <- function(confianza, E, p, N) {
   return (n)
 }
 
-# Recibe coeficiente de confianza, 
-# el margen de error, la proporción p y el valor de la población N
+# Recibe coeficiente de confianza en valor entero, 
+# Se recibe el margen de error, la proporción p en valores relativos 
+# Se recibe el valor de la población N
 # devuelve tamaño de muestra
 # Julio 2023
 # Es alternativa 2
@@ -154,109 +157,41 @@ f_hist_dens_em <- function(poblacion, muestra, contexto="datos de") {
 }
 
 
-# Funicón 
-# Julio 2023
+# Función que construye las n muestras
+# que sirven para construir la distribución muestral de la media
+# Recibe la población como data.frame con una estructura ...2 columnas y 
+# la segunda columna es la variable de interés
+# Recibe la cantidad de muestras a generar q
+# Recibe el tamaño de cada muestra n
+# Devuelve una lista con las muestras, las medias de cada muestra y la media muestral
 f_genera_muestras <- function (poblacion, q, n) {
-  
-  # Genera y construye las muestras
-  muestras = as.list(NULL)
-  m_muestras = NULL
-  for (i in 1:q) {
-    muestras[[i]] <- sample(x = poblacion[,2], size = n, replace = FALSE)
+  #q = 100 # Número de muestras
+    muestras = as.list(NULL)
+    m_muestras = NULL
+    for (i in 1:q) {
+      muestras[[i]] <- sample(x = poblacion[,2], size = n, replace = FALSE)
     
-    m_muestras[i] <- mean(muestras[[i]])
-  }
+      m_muestras[i] <- mean(muestras[[i]])
+    }
   
-  media_muestral = mean(m_muestras)
-  
-  # Construye la distribución muestral
-  lasmuestras <- data.frame(muestras)
-  lasmuestras <- data.frame(t(lasmuestras))
-  colnames(lasmuestras) <- paste0(colnames(poblacion[2]),1:n)
-  rownames(lasmuestras) <- paste0("M",1:q)
-  tabla_dist_muestral <- data.frame(lasmuestras[,1:3], "..."="...", lasmuestras[,(n-2):n], medias_muestrales = m_muestras)
-  
-  
+    media_muestral = mean(m_muestras)
+    
+    # Construye la tabla de distribución muestral formateada invertida
+    lasmuestras <- data.frame(muestras)
+    lasmuestras <- t(lasmuestras)
+    colnames(lasmuestras) <- paste0(colnames(poblacion[2]),1:n)
+    rownames(lasmuestras) <- paste0("M",1:q)
+    
+    tabla_dist_muestral <- data.frame(lasmuestras[,1:3], "..."="...", 
+                                      lasmuestras[,(n-2):n], 
+                                      medias.muestrales = m_muestras)
+
   lista <- list(muestras = muestras, m_muestras = m_muestras, 
                 media_muestral = media_muestral,
                 tabla_dist_muestral = tabla_dist_muestral)
-  
+
   return(lista)
-  
-}
-
-
-# Recibe un conjunto de datos con una estructura de 2 columnas y N registros
-# La primera columna es un valor consecutivo y 
-# La segunda columna es la variable de interés
-# Devuelve histograma
-# Julio 2023
-f_histograma <- function (datos, contexto) {
-  media <- round(mean(datos[,2]), 4)
-  desv_std <- round(sd(datos[,2]), 4)
-  
-  g <- ggplot(datos, aes(x = datos[,2])) + 
-    geom_histogram(aes(y = ..density..),
-                   colour = 1, fill = "gray", bins = 30) +
-    labs(title = paste("Datos de ", contexto),
-         subtitle = paste("N=",nrow(datos)," Me=", media, "ds", desv_std),
-         caption = "Fuente propia") +  
-    geom_vline(xintercept = media, col='red', linetype = "dashed", size = 1) +
-    geom_vline(xintercept = media - desv_std, col='blue', linetype = "dashed", size = 1) +
-    geom_vline(xintercept = media + desv_std, col='blue', linetype = "dashed", size = 1) +
-    geom_density(lwd = 1.2,
-                 linetype = 2,
-                 colour = 2)
-  
-    geom_density(lwd = 1.2,
-                 linetype = 2,
-                 colour = 2)
-  g <- g + theme(
-    plot.title = element_text(color = "black", size = 12, face = "bold"),
-    plot.subtitle = element_text(color = "black",size=6),
-    plot.caption = element_text(color = "black", face = "italic", size=6)
-  )
-  
-  g <- g + labs(x = colnames(datos[2]))
-  
-  return (g)
 
 }
 
-# Se calcula la desviación estándar de la población
-f_calcular_ds <- function(poblacion) {
-  media_p <- mean(poblacion)
-  ds <- sqrt((sum((poblacion - media_p) ^ 2)) / (N))
-  return(ds)
-}
 
-
-# Recibe vector que contienen la población y muestra, 
-# además del tamaño de cada muestra 
-# Devuelven el ua lista con rtes estadísticos:
-# error estándar de una población infinita, desviación estándar de la población y 
-# desviación de la distribución muestral o la muestra.
-# Agosto 2023
-f_er_std_finitas <- function(poblacion, muestra, n) {
-  N <- length(poblacion)
-
-  desv_std_p <- sd(poblacion)
-  desv_std_m <- sd(muestra)
-  er_std <- sqrt((N-n)/(N-1)) * (desv_std_p / sqrt(n))
-  
-  lista <- list(er_std = er_std, desv_std_p = desv_std_p, desv_std_m = desv_std_m)
-  return(lista)
-}
-
-
-# Reciben la desviación estándar de una población no conocida y 
-# un vector con la muestra
-# Devuelven el error estándar para población infinita
-f_er_std_infinitas <- function(desv_std_p, muestra, n) {
-  
-  er_std <- sd(desv_std_p / n)
-  desv_std_m <- sd(muestra)
-  
-  lista <- list(er_std = er_std, desv_std_p = desv_std_p, desv_std_m = desv_std_m)
-  return(lista)
-}
