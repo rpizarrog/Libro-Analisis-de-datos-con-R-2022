@@ -71,16 +71,23 @@ f_probar_hipotesis_all <- function (h0, h1, tipo = 1, h0_string ="Realidad actua
 
 # Septiembre 2023
 # La función recibe los parámetros de acuerdo a la fórmula y devuelve 
-# el valor de z de prueba para su contraste
-f.devolver.z.prueba <- function(media_m, desv_std_m, media_p, n) {
-  z <- (media_m - media_p) / (desv_p / sqrt(n))
+# el valor de z de prueba para su contraste.
+# Recibe la media de la muestra, el valor de la media pobacoinal a comparar,
+# la desviación estándar conocida de la población y e valor de n tamaño de la muestra.
+# Devuelve el valor de z.
+f.devolver.z.prueba <- function(media_m, desv_std, media_p, n) {
+  z <- (media_m - media_p) / (desv_std / sqrt(n))
   z
 }
 
 
 # Septiembre 2023
 # La función recibe los parámetros de acuerdo a la fórmula y devuelve 
-# el valor de t de prueba para su contraste
+# el valor de t de prueba para su contraste.
+# Recibe la media de la muestra, el valor de la media poblacional a comparar,
+# la desviación estándar conocida de la muestra y el valor 
+# de n tamaño de la muestra pequeña menor oo igual a 30.
+# Devuelve el valor de t.
 f.devolver.t.prueba <- function(media_m, desv_std_m, media_p, n) {
   t <- (media_m - media_p) / (desv_std_m / sqrt(n))
   t
