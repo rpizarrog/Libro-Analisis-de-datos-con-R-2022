@@ -154,7 +154,7 @@ f_probar_hipotesis_z <- function(confianza, z, h0_string ="Realidad actual verda
     }
   }
   
-  lista <- list(g = g, H0 = H0, p = p)
+  lista <- list(g = g, H0 = H0)
   return(lista)
 }
 
