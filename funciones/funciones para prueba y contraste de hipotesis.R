@@ -114,7 +114,7 @@ f_probar_hipotesis_z <- function(confianza, z, h0_string ="Realidad actual verda
     } else {
       H0 <- paste("Se rechaza la hipótesis nula Ho:",h0_string,"con nivel de confianza", confianza*100,"%", "a",tipo_cola)
     }
-      
+    
   }
   if (cola == 2)  { 
     # Cola a la derecha
@@ -154,7 +154,7 @@ f_probar_hipotesis_z <- function(confianza, z, h0_string ="Realidad actual verda
     }
   }
   
-  lista <- list(g = g, H0 = H0)
+  lista <- list(g = g, H0 = H0, p = p)
   return(lista)
 }
 
