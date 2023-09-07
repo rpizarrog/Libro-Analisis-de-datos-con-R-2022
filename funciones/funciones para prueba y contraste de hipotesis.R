@@ -160,35 +160,50 @@ f_probar_hipotesis_z <- function(confianza, z, h0_string ="Realidad actual verda
 
 
 # Septembre 2023
-# La función f_probar_hipotesis_p() devuelve la decisión de aceptar o rechazar la hipótesis nula
+# La función f_probar_hipotesis_p_z() devuelve la decisión de aceptar o rechazar la hipótesis nula
 # Recibe los parámetros de z obtenido a partir de función f_dvevoler_z_prueba(), 
 # recibe el valor de significancia que por default es 0.05, pero pudiera ser 0.10, 0.01, 0.001 u otro y 
 # recibe el valor del tipo de hiótesis, si es a dos colas el valor es 1, 
-# cola a la izquieura el valor es 2 y cola a la derecha el valor es 3. 
-# Por omisión, el valor por deault es a dos colas = 1
-f_probar_hipotesis_p <- function(z, significancia, cola=1) {
-  if (tipo == 1) {
+# cola a la izquierda el valor es 2 y cola a la derecha el valor es 3. 
+# Por omisión, el valor por default es a dos colas = 1
+f_probar_hipotesis_p_z <- function(z, significancia, cola=1) {
+  decision <- "Se acepta Ho"
+  if (significancia == 0.10) {
+    rechazo <- "hay cierta evidencia de que H0 no es verdadera"
+  }
+  if (significancia == 0.05) {
+    rechazo <- "hay evidencia fuerte de que H0 no es verdadera"
+  }
+  if (significancia == 0.01) {
+    rechazo <- "hay evidencia muy fuerte de que H0 no es verdadera"
+  }
+  if (significancia == 0.001) {
+    rechazo <- "hay evidencia extreamdamente fuerte de que H0 no es verdadera"
+  }
+  if (cola == 1) {
     # dos colas
     p <- 1 - pnorm(abs(z))
     p.valor = 2 * p
   }
   
-  if (tipo == 2) {
+  if (cola == 2) {
     # dos colas
     p <- pnorm(z)
     p.valor = p
   }
-  if (tipo == 3) {
+  if (cola == 3) {
     # dos colas
     p <- pnorm(z, lower.tail = FALSE)
     p.valor = p
   }
   
-  if (p.valor < significancia & significancia == 0.10) {
-    decision = "Se rechaza Ho de a"
+  if (p.valor < significancia ) {
+    decision = paste("Se rechaza Ho porque ", rechazo)
   }
   
   lista = list(p.valor = p.valor, decision = decision)
+  
+  return(lista)
 }
 
 
@@ -200,7 +215,7 @@ f_probar_hipotesis_p <- function(z, significancia, cola=1) {
 # la desviación estándar conocida de la muestra y el valor 
 # de n tamaño de la muestra pequeña menor oo igual a 30.
 # Devuelve el valor de t.
-f.devolver.t.prueba <- function(media_m, desv_std_m, media_p, n) {
+f_devolver_t_prueba <- function(media_m, desv_std_m, media_p, n) {
   t <- (media_m - media_p) / (desv_std_m / sqrt(n))
   t
 }
