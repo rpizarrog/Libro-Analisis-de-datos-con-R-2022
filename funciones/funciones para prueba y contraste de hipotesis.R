@@ -83,7 +83,7 @@ f_devolver_z_prueba <- function(media_m, desv_std, media_p, n) {
 # Septiembre 2023
 # Recibe los parámetros del de confianza en valores relativos 
 # entre 0 y 1, por ejemplo 0.90, 0.95, 0.99; 
-# recibe el valor de z previamene calculado con la función f_devolver_z_prueba()
+# recibe el valor de z previamene calculado con la función f_dvevoler_z_prueba()
 # # recibe la expresión de una hipótesis en caso de que no se proporcione
 # la expresión por omisión en la llamada de la función de la hipótesis nula es 
 # "Realidad actual verdadera"
@@ -158,6 +158,38 @@ f_probar_hipotesis_z <- function(confianza, z, h0_string ="Realidad actual verda
   return(lista)
 }
 
+
+# Septembre 2023
+# La función f_probar_hipotesis_p() devuelve la decisión de aceptar o rechazar la hipótesis nula
+# Recibe los parámetros de z obtenido a partir de función f_dvevoler_z_prueba(), 
+# recibe el valor de significancia que por default es 0.05, pero pudiera ser 0.10, 0.01, 0.001 u otro y 
+# recibe el valor del tipo de hiótesis, si es a dos colas el valor es 1, 
+# cola a la izquieura el valor es 2 y cola a la derecha el valor es 3. 
+# Por omisión, el valor por deault es a dos colas = 1
+f_probar_hipotesis_p <- function(z, significancia, cola=1) {
+  if (tipo == 1) {
+    # dos colas
+    p <- 1 - pnorm(abs(z))
+    p.valor = 2 * p
+  }
+  
+  if (tipo == 2) {
+    # dos colas
+    p <- pnorm(z)
+    p.valor = p
+  }
+  if (tipo == 3) {
+    # dos colas
+    p <- pnorm(z, lower.tail = FALSE)
+    p.valor = p
+  }
+  
+  if (p.valor < significancia & significancia == 0.10) {
+    decision = "Se rechaza Ho de a"
+  }
+  
+  lista = list(p.valor = p.valor, decision = decision)
+}
 
 
 
