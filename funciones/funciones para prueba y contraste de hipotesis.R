@@ -168,6 +168,7 @@ f_probar_hipotesis_z <- function(confianza, z, h0_string ="Realidad actual verda
 # Por omisión, el valor por default es a dos colas = 1
 f_probar_hipotesis_p_z <- function(z, significancia, cola=1) {
   decision <- "Se acepta Ho"
+  rechazo <- NULL
   if (isTRUE(all.equal(significancia, 0.10))) {
     rechazo <- "hay cierta evidencia de que H0 no es verdadera"
   }
