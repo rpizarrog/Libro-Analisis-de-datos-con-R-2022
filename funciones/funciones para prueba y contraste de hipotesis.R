@@ -83,7 +83,7 @@ f_devolver_z_prueba <- function(media_m, desv_std, media_p, n) {
 # Septiembre 2023
 # Recibe los parámetros del de confianza en valores relativos 
 # entre 0 y 1, por ejemplo 0.90, 0.95, 0.99; 
-# recibe el valor de z previamene calculado con la función f_dvevoler_z_prueba()
+# recibe el valor de z previamente calculado con la función f_devoler_z_prueba()
 # # recibe la expresión de una hipótesis en caso de que no se proporcione
 # la expresión por omisión en la llamada de la función de la hipótesis nula es 
 # "Realidad actual verdadera"
@@ -159,7 +159,7 @@ f_probar_hipotesis_z <- function(confianza, z, h0_string ="Realidad actual verda
 }
 
 
-# Septembre 2023
+# Septiembre 2023
 # La función f_probar_hipotesis_p_z() devuelve la decisión de aceptar o rechazar la hipótesis nula
 # Recibe los parámetros de z obtenido a partir de función f_dvevoler_z_prueba(), 
 # recibe el valor de significancia que por default es 0.05, pero pudiera ser 0.10, 0.01, 0.001 u otro y 
@@ -168,18 +168,18 @@ f_probar_hipotesis_z <- function(confianza, z, h0_string ="Realidad actual verda
 # Por omisión, el valor por default es a dos colas = 1
 f_probar_hipotesis_p_z <- function(z, significancia, cola=1) {
   decision <- "Se acepta Ho"
-  rechazo <- NULL
+  rechaza <- NULL
   if (isTRUE(all.equal(significancia, 0.10))) {
-    rechazo <- "hay cierta evidencia de que H0 no es verdadera"
+    rechaza <- "hay cierta evidencia de que H0 no es verdadera"
   }
   if (isTRUE(all.equal(significancia, 0.05))) {
-    rechazo <- "hay evidencia fuerte de que H0 no es verdadera"
+    rechaza <- "hay evidencia fuerte de que H0 no es verdadera"
   }
   if (isTRUE(all.equal(significancia, 0.01))) {
-    rechazo <- "hay evidencia muy fuerte de que H0 no es verdadera"
+    rechaza <- "hay evidencia muy fuerte de que H0 no es verdadera"
   }
   if (isTRUE(all.equal(significancia, 0.001))) {
-    rechazo <- "hay evidencia extremadamente fuerte de que H0 no es verdadera"
+    rechaza <- "hay evidencia extremadamente fuerte de que H0 no es verdadera"
   }
   if (cola == 1) {
     # dos colas
@@ -199,7 +199,7 @@ f_probar_hipotesis_p_z <- function(z, significancia, cola=1) {
   }
   
   if (p.valor < significancia ) {
-    decision = paste("Se rechaza Ho porque ", rechazo)
+    decision = paste("Se rechaza Ho porque ", rechaza)
   }
   
   lista = list(p.valor = p.valor, decision = decision)
