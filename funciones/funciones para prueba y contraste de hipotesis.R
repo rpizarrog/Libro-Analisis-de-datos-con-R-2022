@@ -168,17 +168,17 @@ f_probar_hipotesis_z <- function(confianza, z, h0_string ="Realidad actual verda
 # Por omisión, el valor por default es a dos colas = 1
 f_probar_hipotesis_p_z <- function(z, significancia, cola=1) {
   decision <- "Se acepta Ho"
-  if (significancia == 0.10) {
+  if (isTRUE(all.equal(significancia, 0.10))) {
     rechazo <- "hay cierta evidencia de que H0 no es verdadera"
   }
-  if (significancia == 0.05) {
+  if (isTRUE(all.equal(significancia, 0.05))) {
     rechazo <- "hay evidencia fuerte de que H0 no es verdadera"
   }
-  if (significancia == 0.01) {
+  if (isTRUE(all.equal(significancia, 0.01))) {
     rechazo <- "hay evidencia muy fuerte de que H0 no es verdadera"
   }
-  if (significancia == 0.001) {
-    rechazo <- "hay evidencia extreamdamente fuerte de que H0 no es verdadera"
+  if (isTRUE(all.equal(significancia, 0.001))) {
+    rechazo <- "hay evidencia extremadamente fuerte de que H0 no es verdadera"
   }
   if (cola == 1) {
     # dos colas
@@ -213,7 +213,7 @@ f_probar_hipotesis_p_z <- function(z, significancia, cola=1) {
 # el valor de t de prueba para su contraste.
 # Recibe la media de la muestra, el valor de la media poblacional a comparar,
 # la desviación estándar conocida de la muestra y el valor 
-# de n tamaño de la muestra pequeña menor oo igual a 30.
+# de n tamaño de la muestra pequeña menor o igual a 30.
 # Devuelve el valor de t.
 f_devolver_t_prueba <- function(media_m, desv_std_m, media_p, n) {
   t <- (media_m - media_p) / (desv_std_m / sqrt(n))
