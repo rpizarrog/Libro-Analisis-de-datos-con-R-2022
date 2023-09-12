@@ -309,7 +309,7 @@ f_probar_hipotesis_t <- function(confianza, t, h0_string ="Realidad actual verda
 # cola a la izquierda el valor es 2 y cola a la derecha el valor es 3. 
 # Por omisión, el valor por default es a dos colas = 1
 # Recibe el valor de n que define los grados de libertad
-f_probar_hipotesis_p_z <- function(t, significancia, cola=1, n) {
+f_probar_hipotesis_p_t <- function(t, significancia, cola=1, n) {
   decision <- "Se acepta Ho"
   rechaza <- NULL
   gl <- (n-1)
