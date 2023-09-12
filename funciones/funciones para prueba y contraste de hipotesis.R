@@ -221,4 +221,134 @@ f_devolver_t_prueba <- function(media_m, desv_std_m, media_p, n) {
   t
 }
 
+# Septiembre 2023
+# Recibe los parámetros del de confianza en valores relativos 
+# entre 0 y 1, por ejemplo 0.90, 0.95, 0.99; 
+# recibe el valor de t previamente calculado con la función f_devoler_t_prueba()
+# # recibe la expresión de una hipótesis en caso de que no se proporcione
+# la expresión por omisión en la llamada de la función de la hipótesis nula es 
+# "Realidad actual verdadera"
+# recibe el parámetro de cola dependiendo el tipo de hipótesis a tratar:
+# a dos colas = 1, cola izquierda = 2, cola derecha = 3, 
+# por definición default es a dos colas, 
+# finalmente recibe el valor de n que define los grados de libertad 
+# Devuelve una lista con la gráfica de aceptación o rechazo de Ho y la decisión de Ho
+f_probar_hipotesis_t <- function(confianza, t, h0_string ="Realidad actual verdadera", cola = 1, n) {
+  library(visualize)
+  
+  H0 <- NULL
+  gl <- (n -1)
+  if (cola == 1)  { 
+    # Dos colas
+    alfa <- (1 - confianza) / 2
+    t.critico <- qt(p = alfa, df = gl)
+    t.critico <- abs(t.critico)
+    t.critico
+    
+    tipo_cola <- "dos colas"
+    g <- visualize.t(stat = c(-t.critico, t.critico), section = "tails") +
+      text(0, 0.2, paste(tipo_cola, "\n", confianza * 100, "%", "\n", 
+                         "alfa=", (1 - confianza), "\n",  "alfa / 2 = ", 
+                         (1 - confianza) /  2, "\n", "Acepta Ho", sep = ""),  col = "black") + 
+      abline(v = t, col='red', lwd = 1, lty= 4)
+    
+    if (t > -t.critico & t < t.critico) {
+      H0 <- paste("Se acepta la hipótesis nula Ho:",h0_string,"con nivel de confianza", confianza*100,"%", "a",tipo_cola)
+    } else {
+      H0 <- paste("Se rechaza la hipótesis nula Ho:",h0_string,"con nivel de confianza", confianza*100,"%", "a",tipo_cola)
+    }
+    
+  }
+  if (cola == 2)  { 
+    # Cola a la derecha
+    alfa <- (1 - confianza) 
+    t.critico <- qt(p = alfa, df = gl)
+    t.critico
+    
+    tipo_cola <- "cola a la izquierda"
+    g <- visualize.t(stat = c(t.critico), section = "lower") +
+      text(0, 0.2, paste(tipo_cola, "\n", confianza * 100, "%", "\n", 
+                         "alfa=", (1 - confianza), "\n",  "alfa / 2 = ", 
+                         (1 - confianza) /  2, "\n", "Acepta Ho", sep = ""),  col = "black") + 
+      abline(v = t, col='red', lwd = 1, lty= 4)
+    if (t > t.critico ) {
+      H0 <- paste("Se acepta la hipótesis nula Ho:",h0_string,"con nivel de confianza", confianza*100,"%", "a",tipo_cola)
+    } else {
+      H0 <- paste("Se rechaza la hipótesis nula Ho:",h0_string,"con nivel de confianza", confianza*100,"%", "a",tipo_cola)
+    }
+  }
+  if (cola == 3)  { 
+    # Cola a la derecha
+    alfa <- (1 - confianza) 
+    t.critico <- qt(p = alfa, df = gl, lower.tail = FALSE)
+    t.critico
+  
+    tipo_cola <- "cola a la derecha"
+    g <- visualize.t(stat = c(t.critico), section = "upper") +
+      text(0, 0.2, paste(tipo_cola, "\n", confianza * 100, "%", "\n", 
+                         "alfa=", (1 - confianza), "\n",  "alfa / 2 = ", 
+                         (1 - confianza) /  2, "\n", "Acepta Ho", sep = ""),  col = "black") + 
+      abline(v = t, col='red', lwd = 1, lty= 4)
+    
+    if (t < t.critico ) {
+      H0 <- paste("Se acepta la hipótesis nula Ho:",h0_string,"con nivel de confianza", confianza*100,"%", "a",tipo_cola)
+    } else {
+      H0 <- paste("Se rechaza la hipótesis nula Ho:",h0_string,"con nivel de confianza", confianza*100,"%", "a",tipo_cola)
+    }
+  }
+  
+  lista <- list(g = g, H0 = H0)
+  return(lista)
+}
+
+# Septiembre 2023
+# La función f_probar_hipotesis_p_t() devuelve la decisión de aceptar o rechazar la hipótesis nula
+# Recibe los parámetros de t obtenido a partir de función f_devoler_t_prueba(), 
+# recibe el valor de significancia que por default es 0.05, pero pudiera ser 0.10, 0.01, 0.001 u otro y 
+# recibe el valor del tipo de hipótesis, si es a dos colas el valor es 1, 
+# cola a la izquierda el valor es 2 y cola a la derecha el valor es 3. 
+# Por omisión, el valor por default es a dos colas = 1
+# Recibe el valor de n que define los grados de libertad
+f_probar_hipotesis_p_z <- function(t, significancia, cola=1, n) {
+  decision <- "Se acepta Ho"
+  rechaza <- NULL
+  gl <- (n-1)
+  if (isTRUE(all.equal(significancia, 0.10))) {
+    rechaza <- "hay cierta evidencia de que H0 no es verdadera"
+  }
+  if (isTRUE(all.equal(significancia, 0.05))) {
+    rechaza <- "hay evidencia fuerte de que H0 no es verdadera"
+  }
+  if (isTRUE(all.equal(significancia, 0.01))) {
+    rechaza <- "hay evidencia muy fuerte de que H0 no es verdadera"
+  }
+  if (isTRUE(all.equal(significancia, 0.001))) {
+    rechaza <- "hay evidencia extremadamente fuerte de que H0 no es verdadera"
+  }
+  if (cola == 1) {
+    # dos colas
+    p <- 1 - pt(abs(t), df = gl)
+    p.valor = 2 * p
+  }
+  
+  if (cola == 2) {
+    # dos colas
+    p <- pt(t, df = gl)
+    p.valor = p
+  }
+  if (cola == 3) {
+    # dos colas
+    p <- pt(t, df = gl, lower.tail = FALSE)
+    p.valor = p
+  }
+  
+  if (p.valor < significancia ) {
+    decision = paste("Se rechaza Ho porque ", rechaza)
+  }
+  
+  lista = list(p.valor = p.valor, decision = decision)
+  
+  return(lista)
+}
+
 
