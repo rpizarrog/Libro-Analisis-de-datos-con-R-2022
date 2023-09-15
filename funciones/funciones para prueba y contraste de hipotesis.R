@@ -520,7 +520,7 @@ f_probar_hipotesis_chisq_curve <- function(p_chisq, confianza, n, cola = 1) {
     # Graficar la densidad de la distribución chi cuadrada
     curve(dchisq(x, df = gl), from = min, to = max,
           main = paste("Valores críticos y valor de prueba chisq"), 
-          sub=paste("Crítico izq=", round(chisq_critico_izq, 2), ";", "der=", round(chisq_critico_der, 2), "; gl=", gl),
+          sub=paste("Crítico izq=", round(chisq_critico_izq, 2), ";", "der=", round(chisq_critico_der, 2), "; chisq =", p_chisq,"; gl=", gl),
           ylab = 'Densidad', lwd = 2, col = 'steelblue') 
     
     # Izquierda
@@ -561,7 +561,7 @@ f_probar_hipotesis_chisq_curve <- function(p_chisq, confianza, n, cola = 1) {
     # Graficar la densidad de la distribución chi cuadrada
     curve(dchisq(x, df = gl), from = min, to = max,
           main = paste("Valor crítico y valor de prueba chisq"), 
-          sub=paste("Crítico izq=", round(chisq_critico_izq, 2), "; gl=", gl),
+          sub=paste("Crítico izq=", round(chisq_critico_izq, 2),"; chisq =", p_chisq, "; gl=", gl),
           ylab = 'Densidad', lwd = 2, col = 'steelblue') 
     
     # Izquierda
@@ -601,7 +601,7 @@ f_probar_hipotesis_chisq_curve <- function(p_chisq, confianza, n, cola = 1) {
     # Graficar la densidad de la distribución chi cuadrada
     curve(dchisq(x, df = gl), from = min, to = max,
           main = paste("Valor crítico y valor de prueba chisq"), 
-          sub=paste("Critico der=", round(chisq_critico_der, 2), "; gl=", gl),
+          sub=paste("Critico der=", round(chisq_critico_der, 2), "; chisq =", p_chisq,";gl=", gl),
           ylab = 'Densidad', lwd = 2, col = 'steelblue') 
     
     # Izquierda
