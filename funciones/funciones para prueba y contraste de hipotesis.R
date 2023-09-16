@@ -475,7 +475,7 @@ f_probar_hipotesis_p_chisq <- function(p_chisq, significancia, cola=1, n) {
   }
   if (cola == 1) {
     # dos colas
-    p <- pchisq(q = p_chisq, df = gl, lower.tail = FALSE) # saca el valor cola a la derecha y luego por dos
+    p <- pchisq(q = p_chisq, df = gl) # la probabilidad de chi cuadrada, 
     p.valor = 2 * p
   }
   
