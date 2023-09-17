@@ -500,7 +500,7 @@ f_probar_hipotesis_p_chisq <- function(p_chisq, alfa, cola=1, n) {
     p.valor = p
   }
   
-  if (p.valor < significancia ) {
+  if (p.valor < alfa ) {
     decision = paste("Se rechaza Ho porque ", rechaza)
   }
   
