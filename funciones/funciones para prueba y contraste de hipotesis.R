@@ -457,25 +457,35 @@ f_probar_hipotesis_chisq <- function(confianza, p_chisq, h0_string ="Realidad ac
 # Por omisión, el valor por default es a dos colas = 1
 # Recibe el valor de n que define los grados de libertad
 
-f_probar_hipotesis_p_chisq <- function(p_chisq, significancia, cola=1, n) {
+f_probar_hipotesis_p_chisq <- function(p_chisq, alfa, cola=1, n) {
   decision <- "Se acepta Ho"
   rechaza <- NULL
   gl <- (n-1)
-  if (isTRUE(all.equal(significancia, 0.10))) {
+  if (isTRUE(all.equal(alfa, 0.10))) {
     rechaza <- "hay cierta evidencia de que H0 no es verdadera"
   }
-  if (isTRUE(all.equal(significancia, 0.05))) {
+  if (isTRUE(all.equal(alfa, 0.05))) {
     rechaza <- "hay evidencia fuerte de que H0 no es verdadera"
   }
-  if (isTRUE(all.equal(significancia, 0.01))) {
+  if (isTRUE(all.equal(alfa, 0.01))) {
     rechaza <- "hay evidencia muy fuerte de que H0 no es verdadera"
   }
-  if (isTRUE(all.equal(significancia, 0.001))) {
+  if (isTRUE(all.equal(alfa, 0.001))) {
     rechaza <- "hay evidencia extremadamente fuerte de que H0 no es verdadera"
   }
   if (cola == 1) {
     # dos colas
-    p <- pchisq(q = p_chisq, df = gl) # la probabilidad de chi cuadrada, 
+    chisq_critico_izq = qchisq(p = alfa/2, df = gl)
+    chisq_critico_der = qchisq(p = 1 - alfa/2, df = gl)
+    if (p_chisq > chisq_critico_der) {
+      p <- pchisq(q = p_chisq, df = gl, lower.tail = FALSE) # la probabilidad de chi cuadrada a la derecha, 
+    }
+    if (p_chisq < chisq_critico_izq) {
+      p <- pchisq(q = p_chisq, df = gl) # la probabilidad de chi cuadrada, 
+    }
+    if (p_chisq >= chisq_critico_izq & p_chisq <= chisq_critico_der )  {
+      p <- pchisq(q = p_chisq, df = gl) # la probabilidad de chi cuadrada, 
+    }
     p.valor = 2 * p
   }
   
