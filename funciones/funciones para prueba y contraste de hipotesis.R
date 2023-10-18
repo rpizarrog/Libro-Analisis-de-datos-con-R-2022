@@ -25,7 +25,8 @@ f_probar_hipotesis <- function (h0, h1, h0_string ="Realidad actual verdadera") 
 # tipo =2 cola izquierda o less <=
 # tipo =3 cola a la dereca greather >=
 # Agosto 2023
-f_probar_hipotesos_con_p <- function(confianza, p.tipo=1, z = FALSE, t = FALSE) {
+# NO SE UTILIZA PARA EL LIBRO
+f_probar_hipotesis_con_p <- function(confianza, p.tipo=1, z = FALSE, t = FALSE) {
   # Realizar la prueba de proporciones
   if (tipo == 1) {
     alfa <- (1 - confianza / 100) / 2
@@ -163,7 +164,7 @@ f_probar_hipotesis_z <- function(confianza, z, h0_string ="Realidad actual verda
 # La función f_probar_hipotesis_p_z() devuelve la decisión de aceptar o rechazar la hipótesis nula
 # Recibe los parámetros de z obtenido a partir de función f_dvevoler_z_prueba(), 
 # recibe el valor de significancia que por default es 0.05, pero pudiera ser 0.10, 0.01, 0.001 u otro y 
-# recibe el valor del tipo de hiótesis, si es a dos colas el valor es 1, 
+# recibe el valor del tipo de hipótesis, si es a dos colas el valor es 1, 
 # cola a la izquierda el valor es 2 y cola a la derecha el valor es 3. 
 # Por omisión, el valor por default es a dos colas = 1
 f_probar_hipotesis_p_z <- function(z, significancia, cola=1) {
@@ -641,6 +642,23 @@ f_probar_hipotesis_chisq_curve <- function(p_chisq, confianza, n, cola = 1) {
   
 }
 
+
+
+
+# Octubre 2024
+# La función devuelve el valor del error estándar de la proporción
+# Recibe el valor de la proporción de la población o valor de la hipótesis a contrastar y 
+# el valor del tamaño de la muestra de estudio
+f_ES_proporcion <- function(p_poblacion, n) {
+  ES <- sqrt((p_poblacion * (1 - p_poblacion)) / n)
+  return (ES)
+}
+
+f_z_proporcion <- function(p_muestra, p_poblacion, n) {
+  ES <- f_ES_proporcion(p_poblacion, n)
+  z <- (p_muestra - p_poblacion) / ES
+  return (z)
+}
 
 
 
