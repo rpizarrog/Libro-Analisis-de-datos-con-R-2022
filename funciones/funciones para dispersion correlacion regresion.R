@@ -10,6 +10,7 @@ options(scipen=999) # Notación normal
 # Funciones para gráficos
 
 # Construye diagrama de dispersión 
+# octubre 2023
 f_diag.dispersion <- function (datos) { 
   # datos <- data.frame(datos)
   nom.x = colnames(datos[1])
