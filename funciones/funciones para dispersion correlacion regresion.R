@@ -33,6 +33,34 @@ f_diag.dispersion <- function (datos) {
   
 }
 
+# Construye diagrama de dispersión 
+# Recibe unos datos de dos variables y la correlación de Pearson 
+# que se utiliza para mostrarla en el diagrama de dispersión
+# octubre 2023
+f_diag.dispersion_r_Pearson <- function (datos, r) { 
+  # datos <- data.frame(datos)
+  nom.x = colnames(datos[1])
+  nom.y = colnames(datos[2])
+  x = datos[,1]
+  y = datos[,2]
+  
+  media.x <- round(mean(x, na.rm = TRUE), 4)
+  media.y <- round(mean(y, na.rm = TRUE), 4)
+  
+  ggplot() +
+    geom_point(aes(x = x, y = y), col='red') +
+    geom_vline(xintercept = media.x, col='blue') +
+    geom_hline(yintercept = media.y, col='blue') +
+    ggtitle(label = paste("Dispersión de ", nom.x, " y ", nom.y) , 
+            subtitle = paste("Media ", nom.x, " =", media.x, 
+                             " ; ", "Media ", nom.y, "=", media.y, 
+                             "; r Pearson = ", round(r, 4) )) +
+
+    xlab(nom.x) +
+    ylab(nom.y)
+  
+}
+
 # Función para crear tabla para identificar la correlación de Pearson
 # La función recibe un data.frame de dos variable numéricas 
 # Devuelve la tabla con los cálculos que determina la covarianza
