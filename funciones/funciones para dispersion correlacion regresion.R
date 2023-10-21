@@ -33,6 +33,37 @@ f_diag.dispersion <- function (datos) {
   
 }
 
+# Función para crear tabla para identificar la correlación de Pearson
+# La función recibe un data.frame de dos variable numéricas 
+# Devuelve la tabla con los cálculos que determina la covarianza
+# Devuelve la sumatoria de la columna multiplicación que es la covarianza
+# Devuelve la división de la covarianza entre el producto de las desviaciones estádnar 
+# de las dos variables que es la correlación de Pearson
+f_construye_tabla_Pearson <- function (datos) { 
+  xi <- datos[, 1]
+  yi <- datos[, 2]
+  n <- nrow(datos)
+  tabla <- data.frame(i = 1:n, xi, yi, 
+                      x_med = mean(xi), 
+                      y_med = mean(yi))
+  
+  tabla <- cbind(tabla, ximenos_x_med = tabla$xi - mean(xi))
+  tabla <- cbind(tabla, yimenos_y_med = tabla$yi - mean(yi))
+  
+  tabla <- cbind(tabla, multiplica = (tabla$xi - mean(xi)) * (tabla$yi - mean(yi)))
+  # tabla <- rbind(tabla, apply(tabla, 2, sum))
+  #tabla[nrow(tabla), c(1:7)] <- '***'
+  #row.names(datos[n+1, ]) = 'Suma'
+  
+  suma_multiplica <- sum(tabla[,'multiplica'])
+  covarianza <- suma_multiplica / (n-1)
+  r_pearson <- covarianza / (sd(xi) * sd(yi))  # r Pearson
+  # kable(tabla, caption = paste("Construyendo tabla para correlación de Pearson. Datos", "algo"))
+    
+  lista <- list(tabla = tabla, covarianza = covarianza, r_pearson =   r_pearson)
+  return (lista)
+}
+
 f.prueba.significanncia.corr <- function(r, n) {
   t <- (r * sqrt(n-2))/ (sqrt(1 - r^2))
   t
