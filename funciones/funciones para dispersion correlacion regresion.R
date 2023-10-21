@@ -52,9 +52,9 @@ f_diag.dispersion_r_Pearson <- function (datos, r) {
     geom_vline(xintercept = media.x, col='blue') +
     geom_hline(yintercept = media.y, col='blue') +
     ggtitle(label = paste("Dispersión de ", nom.x, " y ", nom.y) , 
-            subtitle = paste("Media ", nom.x, " =", media.x, 
-                             " ; ", "Media ", nom.y, "=", media.y, 
-                             "; r Pearson = ", round(r, 4) )) +
+            subtitle = paste("Me ", nom.x, "=", media.x, 
+                             "; ", "Me ", nom.y, "=", media.y, 
+                             "; r Pearson=", round(r, 4) )) +
 
     xlab(nom.x) +
     ylab(nom.y)
