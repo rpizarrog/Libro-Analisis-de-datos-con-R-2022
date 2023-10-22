@@ -105,8 +105,8 @@ f_prueba_significancia_corr <- function(r, n) {
 # Octubre 2023
 f_contraste_prueba_t_signif_corr <- function (t, n, confianza, cola = 1) {
   # confianza = 0.95
-  t.critico <- abs(qt(p = (1 - confianza) / 2, df = n-2, lower.tail = FALSE))
-  t.critico
+  t_critico <- abs(qt(p = (1 - confianza) / 2, df = n-2, lower.tail = FALSE))
+  #t.critico
   t_critico_izq = -(t_critico)
   t_critico_der = +(t_critico) # No importa el signo +, es valor absoluto
   conf <- paste(as.character(confianza * 100), "%", sep = "")
