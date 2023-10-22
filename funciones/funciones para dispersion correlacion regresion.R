@@ -94,7 +94,7 @@ f_construye_tabla_Pearson <- function (datos) {
 
 f_prueba_significancia_corr <- function(r, n) {
   t <- (r * sqrt(n-2))/ (sqrt(1 - r^2))
-  t
+  return (t)
 }
 
 
@@ -103,7 +103,7 @@ f_prueba_significancia_corr <- function(r, n) {
 # Recibe el nivel de confianza en valor relativo 0.90, 0.95 0 .099
 # Devuele el gráfico de contraste t contra valores críticos
 # Octubre 2023
-f_diag_prueba_signif_corr <- function (t, n, confianza, cola = 1) {
+f_contraste_prueba_t_signif_corr <- function (t, n, confianza, cola = 1) {
   # confianza = 0.95
   t.critico <- abs(qt(p = (1 - confianza) / 2, df = n-2, lower.tail = FALSE))
   t.critico
@@ -171,6 +171,14 @@ f_reg_lineal_simple <- function (datos) {
                     estadisticos = estadisticos)
   
   return (regresion)
+}
+
+# 22 - Octubre 2023
+# Función que devuelve la probabilidad de t en la t student
+# Recibe el argumento de t de prueba y el valor de n 
+f_p.valor_correlacion_Pearson <- function(t, n) {
+  p.valor <- 2 * (1 - pt(abs(t), (n-2))) # a dos colas
+  return (p.valor)
 }
 
 # 22-11-2022
