@@ -92,28 +92,37 @@ f_construye_tabla_Pearson <- function (datos) {
   return (lista)
 }
 
-f.prueba.significanncia.corr <- function(r, n) {
+f_prueba_significancia_corr <- function(r, n) {
   t <- (r * sqrt(n-2))/ (sqrt(1 - r^2))
   t
 }
 
-f.diag.prueba.signif.corr <- function (t, t.signif,  n, confianza) {
-  t <- abs(t)
+
+# Función que genera el gráfico de contraste para prueba de signficancia de la correlaicón
+# Recibe el valor de t calculado,  el valor de n 
+# Recibe el nivel de confianza en valor relativo 0.90, 0.95 0 .099
+# Devuele el gráfico de contraste t contra valores críticos
+# Octubre 2023
+f_diag_prueba_signif_corr <- function (t, n, confianza, cola = 1) {
+  # confianza = 0.95
+  t.critico <- abs(qt(p = (1 - confianza) / 2, df = n-2, lower.tail = FALSE))
+  t.critico
+  t_critico_izq = -(t_critico)
+  t_critico_der = +(t_critico) # No importa el signo +, es valor absoluto
   conf <- paste(as.character(confianza * 100), "%", sep = "")
-  if (t.signif < -(t) | t.signif > t) {
-    visualize.t(stat = c(-t, t), df = n-2, section = "tails") +
-      text(0, 0.2, conf, col = "red") +
-      text(0, 0.1, expression("t.signif fuera del intervalo; acepta H1"), col="red") +
-      abline(v = t.signif, col = "red", lwd = 3, lty = 2)
-  }  
-  if(t.signif >= -(t) & t.signif <= t) {
-    visualize.t(stat = c(-t, t), df = n-2, section = "tails") +
-      text(0, 0.2, conf, col = "red") +
-      text(0, 0.1, expression("t.signif dentro del intervalo; acepta H0"), col="red") +
-      abline(v = t.signif, col = "red", lwd = 3, lty = 2)
-    
-  }  
   
+  if (cola == 1) { # a dos colas
+    
+    if (t < t_critico_izq | t > t_critico_der) 
+      decision <- paste("t=",round(t, 4),"fuera del intervalo; se rechaza H0")
+    if (t >= t_critico_izq & t <= t_critico_der) 
+      decision <- paste("t=",round(t, 4),"dentro del intervalo; se acepta H0")
+    
+    visualize.t(stat = c(t_critico_izq, t_critico_der), df = n-2, section = "tails") +
+        text(0, 0.2, conf, col = "red") +
+        text(0, 0.1, decision, col="red", cex = .6) +
+        abline(v = t, col = "red", lwd = 3, lty = 2)
+  }
 }
 
 # 22-11-2022
