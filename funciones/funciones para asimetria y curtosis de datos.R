@@ -39,37 +39,5 @@ f_curtosis_r <- function(datos) {
 }
 
 
-# Probar las funciones
-# Los datos
-# Generar datos simulados. Normal estándar
-set.seed(2024)
-datos <- rnorm(100, mean = 0, sd = 1)  # Datos normalmente distribuidos
-print (datos)
-
-
-# Calcular asimetria
-asimetria <- f_asimetria(datos)
-asimetria_skewness <- skewness(datos)
-# Imprimir el resultado
-print(paste("La asimetría de los datos es:", asimetria))
-print(paste("La asimetría de los datos es:", asimetria_skewness))
-
-
-# Calcular la curtosis
-curtosis <- f_curtosis(datos)
-
-print(paste("La curtosis de los datos es:", curtosis))
-# Calcular la curtosis
-
-# Calcular la curtosis
-curtosis_r <- f_curtosis_r(datos)
-
-print(paste("La curtosis de los datos es:", curtosis_r))
-# Calcular la curtosis
-
-curtosis_kurt <- kurtosis(datos)
-# Imprimir el resultado
-print(paste("La curtosis de los datos con kurtosis_kurt es:", curtosis_kurt))
-
 
 
